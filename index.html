@@ -1,26 +1,22 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 14.00 Research Host v2</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PS4 14.00 Research Host v2.1</title><link rel="stylesheet" href="style.css">
 </head>
-<body>
-<main class="card">
-<h1>PS4 14.00 Research Host <small>v2</small></h1>
-<p class="sub">Firmware-aware staged research host</p>
-<div id="fw" class="row"><span>Detected firmware</span><b>Unknown</b></div>
-<div class="stage"><span>Environment</span><b id="s-env">Ready</b></div>
-<div class="stage"><span>Userland entry</span><b id="s-user">Not installed</b></div>
-<div class="stage"><span>Kernel execution</span><b id="s-kern">Not installed</b></div>
-<div class="stage"><span>14.00 kpatch</span><b id="s-kpatch">Reserved</b></div>
-<div class="stage"><span>GoldHEN</span><b id="s-hen">Waiting for 14.00-compatible build</b></div>
+<body><main class="card">
+<h1>PS4 14.00 Research Host <small>v2.1</small></h1>
+<p class="sub">WebKit fingerprint + staged research host</p>
+<div class="row"><span>Detected firmware</span><b id="fw">Unknown</b></div>
+<div class="row"><span>Environment</span><b id="env">Ready</b></div>
+<div class="row"><span>WebKit probe</span><b id="probe">Not run</b></div>
+<div class="row"><span>Userland entry</span><b>Not integrated</b></div>
+<div class="row"><span>Kernel execution</span><b>Not integrated</b></div>
+<div class="row"><span>14.00 kpatch</span><b>Gated</b></div>
+<div class="row"><span>GoldHEN</span><b>Gated</b></div>
 <button id="check">Check environment</button>
-<button id="pipeline" disabled>Run staged pipeline</button>
-<pre id="log">Host v2 initialized.</pre>
-<p class="note">Safety gate: this host will not execute kernel patches or a HEN payload until the preceding stages are explicitly integrated and verified for firmware 14.00.</p>
-</main>
-<script src="host.js"></script>
-</body>
-</html>
+<button id="webkit">Run WebKit probe</button>
+<button disabled>Run staged pipeline</button>
+<pre id="log">Host v2.1 initialized.</pre>
+<p class="note">The probe only fingerprints browser capabilities. It does not claim or execute a 14.00 userland/kernel exploit.</p>
+</main><script src="host.js"></script></body></html>
