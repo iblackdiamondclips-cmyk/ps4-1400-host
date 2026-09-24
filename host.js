@@ -1,7 +1,6 @@
 (function(){
 'use strict';
 var logEl=document.getElementById('log');
-var stagedHen=null;
 function log(s){logEl.textContent += '\n' + s;}
 function set(id,v){document.getElementById(id).textContent=v;}
 function uaInfo(){
@@ -53,51 +52,13 @@ function regression(){
   log('Checks: '+checks);log('Elapsed: '+(Date.now()-started)+' ms');log('Failures: '+failures);
   set('stress',failures===0?'PASS':'FAIL ('+failures+')');
 }
-function getHen(cb){
-  var xhr=new XMLHttpRequest();
-  xhr.open('GET','payloads/hen-1400.bin?ts='+(Date.now()),true);
-  xhr.responseType='arraybuffer';
-  xhr.onload=function(){
-    if(xhr.status===200 && xhr.response && xhr.response.byteLength>0) cb(null,xhr.response);
-    else cb(new Error('HTTP '+xhr.status));
-  };
-  xhr.onerror=function(){cb(new Error('network/file error'));};
-  xhr.send();
-}
-function checkHen(){
-  logEl.textContent='HEN payload check:';
-  getHen(function(err,buf){
-    if(err){set('henPayload','Missing');log('payloads/hen-1400.bin: NOT FOUND');log('Add the official 14.00-capable HEN build to that path.');return;}
-    set('henPayload','Found ('+buf.byteLength+' bytes)');
-    log('payloads/hen-1400.bin: FOUND');log('Size: '+buf.byteLength+' bytes');
-    log('Payload was read only; nothing was executed.');
-  });
-}
-function prepareHen(){
-  logEl.textContent='HEN staging:';
-  var x=uaInfo();
-  if(x.firmware!=='14.00'){
-    log('STOP: firmware is '+x.firmware+', expected 14.00.');return;
-  }
-  getHen(function(err,buf){
-    if(err){set('henPayload','Missing');log('STOP: payloads/hen-1400.bin not found.');return;}
-    stagedHen=new Uint8Array(buf);
-    set('henPayload','Staged ('+stagedHen.byteLength+' bytes)');
-    log('Firmware: 14.00');
-    log('HEN payload staged in browser memory: '+stagedHen.byteLength+' bytes');
-    log('Kernel execution is NOT present in this host.');
-    log('No injection attempted. HEN execution remains gated.');
-  });
-}
 function exportLog(){
   var x=uaInfo();log('\n--- TEST RECORD ---');log('Timestamp: '+new Date().toISOString());
   log('Firmware: '+x.firmware);log('WebKit: '+x.webkit);log('URL: '+location.href);
-  log('HEN staged bytes: '+(stagedHen?stagedHen.byteLength:0));
+  log('GoldHEN 14.00: no official supported release verified.');
 }
 document.getElementById('check').onclick=check;
 document.getElementById('runProbe').onclick=probe;
 document.getElementById('runStress').onclick=regression;
-document.getElementById('checkHen').onclick=checkHen;
-document.getElementById('prepareHen').onclick=prepareHen;
 document.getElementById('exportLog').onclick=exportLog;
 })();

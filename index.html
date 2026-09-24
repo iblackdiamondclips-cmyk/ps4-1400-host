@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 14.00 Research Host v2.3</title>
+<title>PS4 14.00 Research Host v2.4</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-<h1>PS4 14.00 Research Host v2.3</h1>
-<p class="sub">14.00 HEN payload staging + non-destructive diagnostics</p>
+<h1>PS4 14.00 Research Host v2.4</h1>
+<p class="sub">14.00 browser diagnostics and GoldHEN compatibility status</p>
 <table>
 <tr><td>Environment</td><td id="environment">Not checked</td></tr>
 <tr><td>Firmware</td><td id="firmware">Unknown</td></tr>
 <tr><td>WebKit</td><td id="webkit">Unknown</td></tr>
 <tr><td>Capability probe</td><td id="probe">Not run</td></tr>
 <tr><td>Regression tests</td><td id="stress">Not run</td></tr>
-<tr><td>HEN 14.00 payload</td><td id="henPayload">Not checked</td></tr>
+<tr><td>GoldHEN on 14.00</td><td>Not supported by published official release</td></tr>
 <tr><td>Userland entry</td><td id="userland">Not integrated</td></tr>
 <tr><td>Kernel execution</td><td id="kernel">Not integrated</td></tr>
 <tr><td>14.00 kpatch</td><td id="kpatch">Gated</td></tr>
@@ -27,16 +27,12 @@
 <button id="check">Check environment</button>
 <button id="runProbe">Run capability probe</button>
 <button id="runStress">Run safe regression tests</button>
-<button id="checkHen">Check bundled HEN</button>
-<button id="prepareHen">Prepare HEN payload</button>
 <button id="exportLog">Export log to screen</button>
 </div>
 
 <pre id="log">Host v2.3 initialized.</pre>
-<p class="note">
-Expected payload path: <b>payloads/hen-1400.bin</b>. “Prepare” only downloads the payload into browser memory
-and reports its size; it does not claim kernel execution or HEN injection.
-</p>
+<p class="note">This page checks browser properties only. It cannot enable HEN on firmware 14.00. Scene-Collective PS4-HEN has a 14.00 pre-release binary, but this host has no execution entry point.
+See <a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">Scene-Collective PS4-HEN pre-release-main-182</a>. The <a href="https://github.com/GoldHEN/GoldHEN/releases">official GoldHEN releases</a> list supported firmware; use only a release that explicitly lists 14.00 and a compatible execution method when available.</p>
 </main>
 <script src="host.js"></script>
 </body>
