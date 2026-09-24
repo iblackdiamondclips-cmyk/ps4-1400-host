@@ -1,16 +1,15 @@
-# PS4 14.00 Research Host
+# PS4 14.00 Research Host v2
 
-A minimal PS4-browser-friendly host scaffold.
+Staged host scaffold for a PS4 14.00 research console.
 
-## Included
-- PS4 firmware detection from the browser user-agent
-- Simple status/log interface
-- Explicit integration point for firmware 14.00 research components
-- Static files suitable for GitHub Pages
+Stages shown in the UI:
+Environment -> Userland entry -> Kernel execution -> 14.00 kpatch -> GoldHEN/HEN
 
-## Important
-This package does **not** contain or claim a working PS4 14.00 kernel exploit or jailbreak.
-The `1400.c` project discussed separately is kernel-patch shellcode and requires kernel execution before it can run.
+Important:
+- No userland exploit is bundled.
+- No kernel exploit is bundled.
+- Kernel patch execution is intentionally gated.
+- No GoldHEN binary is bundled because the official public GoldHEN release currently does not list PS4 14.00 as supported.
+- Do not rename an older firmware GoldHEN binary and run it on 14.00.
 
-## Run
-Serve this directory with any static HTTP server or publish it with GitHub Pages.
+Deploy these files at the root of the GitHub Pages repository.

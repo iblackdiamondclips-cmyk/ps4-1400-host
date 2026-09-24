@@ -3,19 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 14.00 Research Host</title>
+<title>PS4 14.00 Research Host v2</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main class="card">
-  <h1>PS4 14.00 Research Host</h1>
-  <p class="sub">Firmware-aware research host</p>
-  <div class="row"><span>Detected firmware</span><strong id="fw">Checking…</strong></div>
-  <div class="row"><span>14.00 kpatch slot</span><strong>Available for integration</strong></div>
-  <div class="row"><span>Kernel exploit</span><strong class="warn">Not included / not verified</strong></div>
-  <button id="check">Check environment</button>
-  <pre id="log">Host initialized.</pre>
-  <p class="note">This host does not claim a working 14.00 jailbreak. It is a scaffold for testing publicly verified components.</p>
+<h1>PS4 14.00 Research Host <small>v2</small></h1>
+<p class="sub">Firmware-aware staged research host</p>
+<div id="fw" class="row"><span>Detected firmware</span><b>Unknown</b></div>
+<div class="stage"><span>Environment</span><b id="s-env">Ready</b></div>
+<div class="stage"><span>Userland entry</span><b id="s-user">Not installed</b></div>
+<div class="stage"><span>Kernel execution</span><b id="s-kern">Not installed</b></div>
+<div class="stage"><span>14.00 kpatch</span><b id="s-kpatch">Reserved</b></div>
+<div class="stage"><span>GoldHEN</span><b id="s-hen">Waiting for 14.00-compatible build</b></div>
+<button id="check">Check environment</button>
+<button id="pipeline" disabled>Run staged pipeline</button>
+<pre id="log">Host v2 initialized.</pre>
+<p class="note">Safety gate: this host will not execute kernel patches or a HEN payload until the preceding stages are explicitly integrated and verified for firmware 14.00.</p>
 </main>
 <script src="host.js"></script>
 </body>
