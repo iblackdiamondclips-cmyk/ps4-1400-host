@@ -1,8 +1,14 @@
-# PS4 14.00 Research Host v2.1
+# PS4 14.00 Research Host v2.2
 
-Adds a non-destructive WebKit capability/fingerprint probe and a PS4-WebKit-compatible table layout.
+A non-destructive PS4 browser research harness.
 
-Pipeline:
-Environment -> WebKit probe -> Userland entry -> Kernel execution -> 14.00 kpatch -> GoldHEN
+## v2.2
+- Detects PS4 firmware and AppleWebKit version.
+- Runs a browser capability fingerprint.
+- Adds repeatable, non-destructive JS/ArrayBuffer regression tests.
+- Adds an on-screen test record with timestamp, firmware and WebKit.
+- Keeps Userland, Kernel, 14.00 kpatch and HEN stages gated.
 
-The probe does not exploit WebKit and does not provide kernel execution. kpatch and GoldHEN remain gated.
+This project does **not** include or claim a working PS4 14.00 exploit.
+The regression tests intentionally do not attempt memory corruption,
+arbitrary read/write, kernel execution, patching, or payload loading.

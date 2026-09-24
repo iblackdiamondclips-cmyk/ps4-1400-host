@@ -1,22 +1,33 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 14.00 Research Host v2.1</title><link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PS4 14.00 Research Host v2.2</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body><main class="card">
-<h1>PS4 14.00 Research Host <small>v2.1</small></h1>
-<p class="sub">WebKit fingerprint + staged research host</p>
-<div class="row"><span>Detected firmware</span><b id="fw">Unknown</b></div>
-<div class="row"><span>Environment</span><b id="env">Ready</b></div>
-<div class="row"><span>WebKit probe</span><b id="probe">Not run</b></div>
-<div class="row"><span>Userland entry</span><b>Not integrated</b></div>
-<div class="row"><span>Kernel execution</span><b>Not integrated</b></div>
-<div class="row"><span>14.00 kpatch</span><b>Gated</b></div>
-<div class="row"><span>GoldHEN</span><b>Gated</b></div>
+<body>
+<main>
+<h1>PS4 14.00 Research Host v2.2</h1>
+<p class="sub">Non-destructive browser research harness</p>
+<table>
+<tr><td>Environment</td><td id="environment">Not checked</td></tr>
+<tr><td>Firmware</td><td id="firmware">Unknown</td></tr>
+<tr><td>WebKit</td><td id="webkit">Unknown</td></tr>
+<tr><td>Capability probe</td><td id="probe">Not run</td></tr>
+<tr><td>Stress / regression tests</td><td id="stress">Not run</td></tr>
+<tr><td>Userland entry</td><td>Not integrated</td></tr>
+<tr><td>Kernel execution</td><td>Not integrated</td></tr>
+<tr><td>14.00 kpatch</td><td>Gated</td></tr>
+<tr><td>HEN</td><td>Gated</td></tr>
+</table>
 <button id="check">Check environment</button>
-<button id="webkit">Run WebKit probe</button>
-<button disabled>Run staged pipeline</button>
-<pre id="log">Host v2.1 initialized.</pre>
-<p class="note">The probe only fingerprints browser capabilities. It does not claim or execute a 14.00 userland/kernel exploit.</p>
-</main><script src="host.js"></script></body></html>
+<button id="runProbe">Run capability probe</button>
+<button id="runStress">Run safe regression tests</button>
+<button id="exportLog">Export log to screen</button>
+<pre id="log">Host v2.2 initialized.</pre>
+<p class="note">This harness fingerprints and stress-tests ordinary browser features. It does not execute an exploit, kernel code, kpatch, or HEN.</p>
+</main>
+<script src="host.js"></script>
+</body>
+</html>
