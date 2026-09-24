@@ -3,30 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 14.00 Research Host v2.2</title>
+<title>PS4 14.00 Research Host v2.3</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-<h1>PS4 14.00 Research Host v2.2</h1>
-<p class="sub">Non-destructive browser research harness</p>
+<h1>PS4 14.00 Research Host v2.3</h1>
+<p class="sub">14.00 HEN payload staging + non-destructive diagnostics</p>
 <table>
 <tr><td>Environment</td><td id="environment">Not checked</td></tr>
 <tr><td>Firmware</td><td id="firmware">Unknown</td></tr>
 <tr><td>WebKit</td><td id="webkit">Unknown</td></tr>
 <tr><td>Capability probe</td><td id="probe">Not run</td></tr>
-<tr><td>Stress / regression tests</td><td id="stress">Not run</td></tr>
-<tr><td>Userland entry</td><td>Not integrated</td></tr>
-<tr><td>Kernel execution</td><td>Not integrated</td></tr>
-<tr><td>14.00 kpatch</td><td>Gated</td></tr>
-<tr><td>HEN</td><td>Gated</td></tr>
+<tr><td>Regression tests</td><td id="stress">Not run</td></tr>
+<tr><td>HEN 14.00 payload</td><td id="henPayload">Not checked</td></tr>
+<tr><td>Userland entry</td><td id="userland">Not integrated</td></tr>
+<tr><td>Kernel execution</td><td id="kernel">Not integrated</td></tr>
+<tr><td>14.00 kpatch</td><td id="kpatch">Gated</td></tr>
+<tr><td>HEN execution</td><td id="henExec">Gated</td></tr>
 </table>
+
+<div class="buttons">
 <button id="check">Check environment</button>
 <button id="runProbe">Run capability probe</button>
 <button id="runStress">Run safe regression tests</button>
+<button id="checkHen">Check bundled HEN</button>
+<button id="prepareHen">Prepare HEN payload</button>
 <button id="exportLog">Export log to screen</button>
-<pre id="log">Host v2.2 initialized.</pre>
-<p class="note">This harness fingerprints and stress-tests ordinary browser features. It does not execute an exploit, kernel code, kpatch, or HEN.</p>
+</div>
+
+<pre id="log">Host v2.3 initialized.</pre>
+<p class="note">
+Expected payload path: <b>payloads/hen-1400.bin</b>. “Prepare” only downloads the payload into browser memory
+and reports its size; it does not claim kernel execution or HEN injection.
+</p>
 </main>
 <script src="host.js"></script>
 </body>

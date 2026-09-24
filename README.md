@@ -1,14 +1,17 @@
-# PS4 14.00 Research Host v2.2
+# PS4 14.00 Research Host v2.3
 
-A non-destructive PS4 browser research harness.
+This version adds a PS4-HEN 14.00 payload staging slot.
 
-## v2.2
-- Detects PS4 firmware and AppleWebKit version.
-- Runs a browser capability fingerprint.
-- Adds repeatable, non-destructive JS/ArrayBuffer regression tests.
-- Adds an on-screen test record with timestamp, firmware and WebKit.
-- Keeps Userland, Kernel, 14.00 kpatch and HEN stages gated.
+## Payload path
+Place the 14.00-capable HEN build at:
 
-This project does **not** include or claim a working PS4 14.00 exploit.
-The regression tests intentionally do not attempt memory corruption,
-arbitrary read/write, kernel execution, patching, or payload loading.
+`payloads/hen-1400.bin`
+
+The host can verify that the file is reachable and stage it in browser memory.
+
+## Important
+The Scene-Collective PS4-HEN project added firmware 14.00 offsets/support in commit d077fb4.
+This host does **not** contain a userland or kernel exploit and therefore does not claim to inject or execute HEN.
+The execution stages remain gated until a real execution path is integrated.
+
+Keep v2.2 as a known-good backup.
