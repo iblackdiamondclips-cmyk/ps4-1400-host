@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07101f">
 <meta name="description" content="PS4 browser diagnostics and public firmware compatibility status.">
-<title>PS4 Research HUD · Firmware 14.00</title>
-<link rel="stylesheet" href="style.css?v=2.7">
+<title>PS4 Research HUD · Firmware Map</title>
+<link rel="stylesheet" href="style.css?v=2.8">
 </head>
 <body>
 <main class="shell">
@@ -69,27 +69,40 @@
     </div>
     <p class="section-note">Support varies by exact firmware and exploit method. This page reports status; it does not launch jailbreaks for any version.</p>
     <div class="version-table" role="table" aria-label="Firmware support status">
-      <div class="version-row version-head" role="row"><span role="columnheader">Firmware</span><span role="columnheader">Public scene status</span><span role="columnheader">This host</span></div>
-      <div class="version-row" role="row" id="rangeLegacy"><strong>5.05–12.02</strong><span>Firmware-specific community methods</span><span class="tag tag-info">Reference only</span></div>
-      <div class="version-row" role="row" id="rangeRecent"><strong>13.00–13.52</strong><span>Public methods for listed builds; Relapse chain through 13.52</span><span class="tag tag-info">Reference only</span></div>
-      <div class="version-row active-row" role="row" id="range1400"><strong>14.00</strong><span>No public, reproducible full chain found</span><span class="tag tag-blocked">Diagnostics only</span></div>
-      <div class="version-row" role="row" id="rangeOther"><strong>Other / unknown</strong><span>Not classified by this status table</span><span class="tag tag-muted">Check exact FW</span></div>
+      <div class="version-row version-head" role="row"><span role="columnheader">Firmware</span><span role="columnheader">Published chain / status</span><span role="columnheader">Evidence</span></div>
+      <div class="version-row" role="row" id="fw505"><strong>5.05</strong><span>Legacy exploit route; GoldHEN release exists. Separate host required.</span><span class="tag tag-info">Reference</span></div>
+      <div class="version-row" role="row" id="fwLegacy"><strong>Below 6.70</strong><span>Legacy firmware methods vary by exact build; outside the linked chain matrix.</span><span class="tag tag-muted">Not mapped</span></div>
+      <div class="version-row" role="row" id="fw670"><strong>6.70–6.72</strong><span>Bad Hoist + Sleirsgoevy kernel exploit</span><span class="tag tag-tested">Upstream tested</span></div>
+      <div class="version-row" role="row" id="fw960"><strong>7.00–9.60</strong><span>PSFree + Lapse</span><span class="tag tag-tested">Upstream tested</span></div>
+      <div class="version-row" role="row" id="fw1102lapse"><strong>7.00–11.02</strong><span>CSSFontFace + Lapse</span><span class="tag tag-tested">Upstream tested</span></div>
+      <div class="version-row" role="row" id="fw1102netctrl"><strong>9.00–11.02</strong><span>CSSFontFace + Netctrl</span><span class="tag tag-tested">Upstream tested</span></div>
+      <div class="version-row" role="row" id="fw1202"><strong>11.00–12.02</strong><span>Slopkit + Lapse</span><span class="tag tag-tested">Upstream tested</span></div>
+      <div class="version-row" role="row" id="fw1300"><strong>12.50–13.00</strong><span>Slopkit + Netctrl</span><span class="tag tag-tested">Upstream tested</span></div>
+      <div class="version-row" role="row" id="fw1352"><strong>13.02–13.52</strong><span>Slopkit + Relapse</span><span class="tag tag-tested">Upstream tested</span></div>
+      <div class="version-row" role="row" id="range1400"><strong>14.00</strong><span>No verified public full chain integrated in this host</span><span class="tag tag-blocked">Diagnostics only</span></div>
+      <div class="version-row" role="row" id="rangeOther"><strong>Unlisted / unknown</strong><span>Not listed in the checked upstream compatibility matrix</span><span class="tag tag-muted">Check exact FW</span></div>
     </div>
-    <p class="selection-note" id="versionNote" aria-live="polite">Detected target: 14.00 · exploit launch unavailable.</p>
+    <p class="selection-note" id="versionNote" aria-live="polite">Checking the exact firmware against published compatibility ranges…</p>
+    <div class="route-card" id="routeCard">
+      <div><strong id="routeTitle">This page is a status guide</strong><p id="routeDetail">It does not run exploits. For firmware with a listed chain, open the upstream host yourself.</p></div>
+      <a id="upstreamHost" class="button button-primary" href="https://webkitty.arabpixel.net/" target="_blank" rel="noopener noreferrer" hidden>Open upstream host</a>
+    </div>
+    <p class="section-note goldhen-note"><strong>GoldHEN is a separate compatibility check.</strong> An exploit chain working on a firmware does not by itself prove that every GoldHEN build supports it. The upstream host offers a GoldHEN selection; use only a build explicitly listed for your exact firmware.</p>
+    <p class="source-link"><a href="https://github.com/ArabPixel/WebKitty#supported-by-this-repository" target="_blank" rel="noopener noreferrer">Upstream exploit-chain matrix</a> · <a href="https://github.com/GoldHEN/GoldHEN/releases" target="_blank" rel="noopener noreferrer">GoldHEN release compatibility</a></p>
   </section>
 
   <section class="panel" aria-labelledby="chainHeading">
     <div class="section-heading">
-      <div><p class="eyebrow">03 / EXECUTION CHAIN</p><h2 id="chainHeading">Readiness</h2></div>
-      <span class="tag tag-blocked">Auto launch unavailable</span>
+      <div><p class="eyebrow">03 / THIS HOST</p><h2 id="chainHeading">Integration status</h2></div>
+      <span class="tag tag-info">Status guide only</span>
     </div>
     <ol class="stages">
-      <li><span class="stage-number">01</span><div><strong>Browser entry</strong><p>Firmware-specific userland exploit</p></div><span class="tag tag-blocked">Missing</span></li>
-      <li><span class="stage-number">02</span><div><strong>Kernel access</strong><p>Verified kernel exploit chain</p></div><span class="tag tag-blocked">Missing</span></li>
-      <li><span class="stage-number">03</span><div><strong>Kernel patches</strong><p>14.00 offsets appear in experimental PS4-HEN source</p></div><span class="tag tag-pending">Experimental</span></li>
-      <li><span class="stage-number">04</span><div><strong>HEN payload</strong><p>Artifact can be checked; execution is not integrated</p></div><span class="tag tag-pending">Unverified</span></li>
+      <li><span class="stage-number">01</span><div><strong>Browser entry</strong><p>Not bundled; upstream link appears for listed chain ranges</p></div><span class="tag tag-info">External</span></li>
+      <li><span class="stage-number">02</span><div><strong>Kernel chain</strong><p>Selected by the upstream host for its listed firmware ranges</p></div><span class="tag tag-info">External</span></li>
+      <li><span class="stage-number">03</span><div><strong>Kernel patches</strong><p>Not executed by this diagnostics page</p></div><span class="tag tag-muted">Not bundled</span></li>
+      <li><span class="stage-number">04</span><div><strong>GoldHEN / HEN</strong><p>Use a build explicitly marked for the detected firmware</p></div><span class="tag tag-pending">Verify build</span></li>
     </ol>
-    <p class="callout"><strong>Automatic payload injection is disabled.</strong> The browser entry and kernel stages are missing for 14.00. Offsets or a matching payload do not make a working jailbreak.</p>
+    <p class="callout"><strong>This page never auto-launches or injects a payload.</strong> It is a firmware guide with a manual link to an upstream host. For 14.00, the checked offsets/artifact still do not establish a working exploit chain.</p>
     <p class="source-link"><a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">View the experimental PS4-HEN source and release</a></p>
   </section>
 
@@ -110,10 +123,10 @@
   </section>
 
   <footer>
-    <p><span class="footer-mark">ORBIT HUD / v2.7</span> Results describe browser and public source status only; they do not confirm exploit compatibility.</p>
+    <p><span class="footer-mark">ORBIT HUD / v2.8</span> Upstream ranges are reported as published; exploit attempts can still fail or crash. This host itself only reports status.</p>
     <div class="footer-links"><a href="SOURCE-AUDIT-14.00.md">Read the 14.00 source audit</a><a href="experiment.html">Verify the experimental HEN artifact</a></div>
   </footer>
 </main>
-<script src="host.js?v=2.7"></script>
+<script src="host.js?v=2.8"></script>
 </body>
 </html>

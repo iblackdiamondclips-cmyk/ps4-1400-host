@@ -2,7 +2,7 @@
   'use strict';
 
   var logEl = document.getElementById('log');
-  var lastLog = 'ORBIT FIELD HUD v2.7 initialized. No payload will be executed.';
+  var lastLog = 'ORBIT FIELD HUD v2.8 initialized. No payload will be executed.';
 
   function set(id, value) {
     var el = document.getElementById(id);
@@ -51,27 +51,50 @@
 
   function updateVersionMap(firmware) {
     var version = parseFloat(firmware);
-    var rowId = 'rangeOther';
-    var note = 'Detected target: ' + firmware + ' · this host does not launch exploits.';
-    setVersionRow('rangeLegacy', false);
-    setVersionRow('rangeRecent', false);
-    setVersionRow('range1400', false);
-    setVersionRow('rangeOther', false);
+    var note = 'Detected target: ' + firmware + ' · this page reports status and does not launch exploits.';
+    var matches = [];
+    var rowIds = ['fw505', 'fwLegacy', 'fw670', 'fw960', 'fw1102lapse', 'fw1102netctrl', 'fw1202', 'fw1300', 'fw1352', 'range1400', 'rangeOther'];
+    var i;
+    for (i = 0; i < rowIds.length; i++) setVersionRow(rowIds[i], false);
 
     if (firmware === '14.00') {
-      rowId = 'range1400';
-      note = 'Detected target: 14.00 · diagnostics only; automatic exploit launch is unavailable.';
-    } else if (!isNaN(version) && version >= 5.05 && version <= 12.02) {
-      rowId = 'rangeLegacy';
-      note = 'Detected target: ' + firmware + ' · community methods vary by exact firmware; this host does not launch them.';
-    } else if (!isNaN(version) && version >= 13.00 && version <= 13.52) {
-      rowId = 'rangeRecent';
-      note = 'Detected target: ' + firmware + ' · public methods exist for listed builds; this host does not launch them.';
-    } else if (firmware === 'Unknown') {
+      matches = ['range1400'];
+      note = 'Detected target: 14.00 · diagnostics only; this page has no verified entry-to-kernel chain.';
+    } else if (!isNaN(version) && version === 5.05) {
+      matches = ['fw505'];
+      note = 'Detected target: 5.05 · a legacy route is required; it is not part of the linked WebKitty chain matrix.';
+    } else if (!isNaN(version) && version > 0 && version < 6.70) {
+      matches = ['fwLegacy'];
+      note = 'Detected target: ' + firmware + ' · legacy methods depend on the exact build; the linked WebKitty matrix does not cover it.';
+    } else if (!isNaN(version)) {
+      if (version >= 6.70 && version <= 6.72) matches.push('fw670');
+      if (version >= 7.00 && version <= 9.60) matches.push('fw960');
+      if (version >= 7.00 && version <= 11.02) matches.push('fw1102lapse');
+      if (version >= 9.00 && version <= 11.02) matches.push('fw1102netctrl');
+      if (version >= 11.00 && version <= 12.02) matches.push('fw1202');
+      if (version >= 12.50 && version <= 13.00) matches.push('fw1300');
+      if (version >= 13.02 && version <= 13.52) matches.push('fw1352');
+      if (matches.length) {
+        note = 'Detected target: ' + firmware + ' · matching upstream chain range(s) are highlighted; attempts are not guaranteed.';
+      } else {
+        matches = ['rangeOther'];
+        note = 'Detected target: ' + firmware + ' · no chain for this exact release appears in the checked upstream matrix.';
+      }
+    } else {
+      matches = ['rangeOther'];
       note = 'Firmware could not be read from this browser. Check the console browser and retry.';
     }
 
-    setVersionRow(rowId, true);
+    for (i = 0; i < matches.length; i++) setVersionRow(matches[i], true);
+    var upstreamLink = document.getElementById('upstreamHost');
+    var routeTitle = document.getElementById('routeTitle');
+    var routeDetail = document.getElementById('routeDetail');
+    var hasChain = matches.some(function (id) { return id !== 'fw505' && id !== 'range1400' && id !== 'rangeOther'; });
+    if (upstreamLink) upstreamLink.hidden = !hasChain;
+    if (routeTitle) routeTitle.textContent = hasChain ? 'Published chain listed for this firmware' : 'No matching browser chain is listed here';
+    if (routeDetail) routeDetail.textContent = hasChain
+      ? 'Open the upstream host manually to review its firmware detection and options. This HUD will not start the exploit.'
+      : 'This page will not run an exploit. Check the exact version and its listed source before choosing another route.';
     set('versionNote', note);
   }
 
@@ -90,12 +113,12 @@
       ? 'Browser entry and kernel access are not integrated. Automatic payload injection is disabled.'
       : 'This automatic check reads browser details only. No exploit or HEN is launched.');
     updateVersionMap(info.firmware);
-    lastLog = 'ORBIT FIELD HUD v2.7 / environment check';
+    lastLog = 'ORBIT FIELD HUD v2.8 / environment check';
     log('PlayStation browser: ' + (isPS4 ? 'yes' : 'not detected'));
     log('Firmware: ' + info.firmware);
     log('WebKit: ' + info.webkit);
-    log('Support map: updated for detected firmware');
-    log('Automatic exploit injection: unavailable; no verified 14.00 chain');
+    log('Support map: checked against published upstream ranges');
+    log('This host: diagnostics only; exploit launch remains disabled');
     log('Payload execution: disabled');
   }
 
@@ -164,7 +187,7 @@
   function report() {
     var info = uaInfo();
     var reportText = [
-      'ORBIT FIELD HUD v2.7 · PS4 Research Host',
+      'ORBIT FIELD HUD v2.8 · PS4 Research Host',
       'Timestamp: ' + new Date().toISOString(),
       'Firmware: ' + info.firmware,
       'WebKit: ' + info.webkit,
