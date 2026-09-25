@@ -3,17 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 14.00 integration experiment</title>
+<title>PS4 14.00 HEN artifact check</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
-<h1>PS4 14.00 integration experiment</h1>
-<p class="sub">Checks the public 14.00 HEN and kernel patch files, and the 13.52 loader prerequisites.</p>
-<button id="run">Run integration checks</button>
-<pre id="result">Ready. No payload will be executed by this page.</pre>
-<p class="note">The public 13.52 loader needs firmware specific WebKit and kernel addresses. A present binary is not proof of an execution path. This experiment does not run kernel code or HEN.</p>
-<p><a href="index.html">Back to research host</a></p>
+<main class="shell">
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">PS4</div>
+    <div><p class="eyebrow">STATIC FILE CHECK</p><h1>Experimental HEN artifact</h1></div>
+    <span class="version">v2.6</span>
+  </header>
+  <section class="status-banner" aria-live="polite">
+    <span class="status-dot" aria-hidden="true"></span>
+    <div><strong>Verification only</strong><p>This page downloads the binary to check its size and, when supported, its SHA-256. It never executes the payload.</p></div>
+  </section>
+  <section class="panel">
+    <div class="section-heading">
+      <div><p class="eyebrow">PS4-HEN PRE-RELEASE-MAIN-182</p><h2>Check local artifact</h2></div>
+      <button class="button button-primary" id="run">Verify hen.bin</button>
+    </div>
+    <p class="callout"><strong>Experimental:</strong> matching the release file does not establish a working browser entry, kernel exploit, or complete 14.00 jailbreak.</p>
+    <pre id="result" aria-live="polite">Ready. No payload will be executed.</pre>
+    <p><a href="index.html">Back to research host</a></p>
+  </section>
 </main>
 <script src="experiment.js"></script>
 </body>

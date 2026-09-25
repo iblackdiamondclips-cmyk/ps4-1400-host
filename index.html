@@ -10,12 +10,12 @@
 <body>
 <main class="shell">
   <header class="topbar">
-    <div class="brand-mark" aria-hidden="true">PS4</div>
+      <div class="brand-mark" aria-hidden="true">PS4</div>
     <div>
       <p class="eyebrow">BROWSER RESEARCH HOST</p>
       <h1>Firmware 14.00</h1>
     </div>
-    <span class="version">v2.5</span>
+    <span class="version">v2.6</span>
   </header>
 
   <section class="status-banner" aria-live="polite">
@@ -47,10 +47,11 @@
     <ol class="stages">
       <li><span class="stage-number">1</span><div><strong>Browser entry</strong><p>Firmware-specific userland exploit</p></div><span class="tag tag-blocked">Missing</span></li>
       <li><span class="stage-number">2</span><div><strong>Kernel access</strong><p>Exploit chain to reach kernel code</p></div><span class="tag tag-blocked">Missing</span></li>
-      <li><span class="stage-number">3</span><div><strong>Kernel patches</strong><p>14.00 patch source supplied separately</p></div><span class="tag tag-pending">Not run</span></li>
-      <li><span class="stage-number">4</span><div><strong>HEN payload</strong><p>Compatible, tested firmware build</p></div><span class="tag tag-blocked">Missing</span></li>
+      <li><span class="stage-number">3</span><div><strong>Kernel patches</strong><p>14.00 offsets are in experimental PS4-HEN pre-release 182</p></div><span class="tag tag-pending">Experimental</span></li>
+      <li><span class="stage-number">4</span><div><strong>HEN payload</strong><p>Experimental PS4-HEN binary is present; release hash can be checked</p></div><span class="tag tag-pending">Experimental</span></li>
     </ol>
-    <p class="callout"><strong>Execution is disabled.</strong> A 14.00 kernel patch is not a browser entry point, and this host does not load payloads.</p>
+    <p class="callout"><strong>Execution is disabled.</strong> Browser entry and kernel access are missing. The HEN artifact and offsets are experimental components, not a tested 14.00 jailbreak chain.</p>
+    <p class="source-link"><a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">PS4-HEN pre-release-main-182 source and release</a></p>
   </section>
 
   <section class="panel" aria-labelledby="checksHeading">
@@ -71,7 +72,7 @@
 
   <footer>
     <p>This host performs local browser diagnostics. Results do not confirm exploit compatibility or HEN support.</p>
-    <a href="experiment.html">Open file integration checks</a>
+    <a href="experiment.html">Verify the experimental HEN artifact</a>
   </footer>
 </main>
 <script src="host.js"></script>
