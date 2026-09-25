@@ -2,7 +2,7 @@
   'use strict';
 
   var logEl = document.getElementById('log');
-  var lastLog = 'Research host initialized. No payload will be executed.';
+  var lastLog = 'ORBIT FIELD HUD v2.7 initialized. No payload will be executed.';
 
   function set(id, value) {
     var el = document.getElementById(id);
@@ -22,25 +22,81 @@
     return { ua: ua, firmware: fw ? fw[1] : 'Unknown', webkit: wk ? wk[1] : 'Unknown' };
   }
 
-  function check() {
+  function updateClock() {
+    var now = new Date();
+    var timeEl = document.getElementById('clock');
+    var dateEl = document.getElementById('clockDate');
+    if (timeEl) {
+      try {
+        timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      } catch (e) {
+        timeEl.textContent = now.toTimeString().slice(0, 8);
+      }
+    }
+    if (dateEl) {
+      try {
+        dateEl.textContent = now.toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' });
+      } catch (e2) {
+        dateEl.textContent = now.toDateString();
+      }
+    }
+  }
+
+  function setVersionRow(id, active) {
+    var row = document.getElementById(id);
+    if (!row) return;
+    row.className = row.className.replace(/\s*active-row/g, '');
+    if (active) row.className += ' active-row';
+  }
+
+  function updateVersionMap(firmware) {
+    var version = parseFloat(firmware);
+    var rowId = 'rangeOther';
+    var note = 'Detected target: ' + firmware + ' · this host does not launch exploits.';
+    setVersionRow('rangeLegacy', false);
+    setVersionRow('rangeRecent', false);
+    setVersionRow('range1400', false);
+    setVersionRow('rangeOther', false);
+
+    if (firmware === '14.00') {
+      rowId = 'range1400';
+      note = 'Detected target: 14.00 · diagnostics only; automatic exploit launch is unavailable.';
+    } else if (!isNaN(version) && version >= 5.05 && version <= 12.02) {
+      rowId = 'rangeLegacy';
+      note = 'Detected target: ' + firmware + ' · community methods vary by exact firmware; this host does not launch them.';
+    } else if (!isNaN(version) && version >= 13.00 && version <= 13.52) {
+      rowId = 'rangeRecent';
+      note = 'Detected target: ' + firmware + ' · public methods exist for listed builds; this host does not launch them.';
+    } else if (firmware === 'Unknown') {
+      note = 'Firmware could not be read from this browser. Check the console browser and retry.';
+    }
+
+    setVersionRow(rowId, true);
+    set('versionNote', note);
+  }
+
+  function check(isAutomatic) {
     var info = uaInfo();
     var isPS4 = /PlayStation/i.test(info.ua);
     var target = info.firmware === '14.00';
     set('environment', isPS4 ? 'PlayStation browser' : 'Browser available');
     set('firmware', info.firmware);
+    set('heroFirmware', info.firmware === 'Unknown' ? 'Unknown' : info.firmware);
     set('webkit', info.webkit);
     set('entry', 'Not integrated');
-    set('overallStatus', target ? '14.00 detected · diagnostics only' : 'Diagnostics ready');
+    set('autoStatus', isAutomatic ? 'AUTO CHECK COMPLETE' : 'CHECK COMPLETE');
+    set('overallStatus', target ? 'Firmware 14.00 detected · research mode' : (isPS4 ? 'Console browser detected' : 'Browser ready · console not detected'));
     set('overallDetail', target
-      ? 'The browser reports firmware 14.00. This does not mean an exploit is available.'
-      : 'This page checks the browser only. No exploit or HEN is integrated.');
-    lastLog = 'Environment check';
+      ? 'Browser entry and kernel access are not integrated. Automatic payload injection is disabled.'
+      : 'This automatic check reads browser details only. No exploit or HEN is launched.');
+    updateVersionMap(info.firmware);
+    lastLog = 'ORBIT FIELD HUD v2.7 / environment check';
     log('PlayStation browser: ' + (isPS4 ? 'yes' : 'not detected'));
     log('Firmware: ' + info.firmware);
     log('WebKit: ' + info.webkit);
-    log('Browser entry: not integrated');
-    log('Kernel execution: disabled');
-    log('HEN execution: disabled');
+    log('Support map: updated for detected firmware');
+    log('Automatic exploit injection: unavailable; no verified 14.00 chain');
+    log('Payload execution: disabled');
   }
 
   function probe() {
@@ -108,7 +164,7 @@
   function report() {
     var info = uaInfo();
     var reportText = [
-      'PS4 14.00 Research Host v2.5',
+      'ORBIT FIELD HUD v2.7 · PS4 Research Host',
       'Timestamp: ' + new Date().toISOString(),
       'Firmware: ' + info.firmware,
       'WebKit: ' + info.webkit,
@@ -121,8 +177,12 @@
     logEl.textContent = reportText;
   }
 
-  document.getElementById('check').addEventListener('click', check);
+  document.getElementById('check').addEventListener('click', function () { check(false); });
   document.getElementById('runProbe').addEventListener('click', probe);
   document.getElementById('runStress').addEventListener('click', regression);
   document.getElementById('exportLog').addEventListener('click', report);
+
+  updateClock();
+  window.setInterval(updateClock, 1000);
+  check(true);
 })();

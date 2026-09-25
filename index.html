@@ -3,78 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0c1d38">
-<title>PS4 14.00 Research Host</title>
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#07101f">
+<meta name="description" content="PS4 browser diagnostics and public firmware compatibility status.">
+<title>PS4 Research HUD · Firmware 14.00</title>
+<link rel="stylesheet" href="style.css?v=2.7">
 </head>
 <body>
 <main class="shell">
   <header class="topbar">
-      <div class="brand-mark" aria-hidden="true">PS4</div>
-    <div>
-      <p class="eyebrow">BROWSER RESEARCH HOST</p>
-      <h1>Firmware 14.00</h1>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><span>PS</span><b>4</b></div>
+      <div>
+        <p class="eyebrow">CONSOLE RESEARCH / OFFLINE HOST</p>
+        <p class="brand-name">ORBIT <span>·</span> FIELD HUD</p>
+      </div>
     </div>
-    <span class="version">v2.6</span>
+    <div class="clock-box" aria-label="Local console time">
+      <span class="clock-label">LOCAL TIME</span>
+      <strong id="clock">--:--:--</strong>
+      <span id="clockDate">Checking date…</span>
+    </div>
   </header>
+
+  <section class="hero" aria-labelledby="heroHeading">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="pulse"></span> SYSTEM PROFILE</p>
+      <h1 id="heroHeading">PlayStation 4<br><span>Firmware <b id="heroFirmware">14.00</b></span></h1>
+      <p class="hero-description">Browser diagnostics, firmware recognition and public compatibility status.</p>
+    </div>
+    <div class="hero-state">
+      <span class="state-icon" aria-hidden="true">!</span>
+      <span class="state-label">CURRENT MODE</span>
+      <strong>Research only</strong>
+      <span class="state-detail">No exploit will run</span>
+    </div>
+    <div class="hero-grid" aria-hidden="true"></div>
+  </section>
 
   <section class="status-banner" aria-live="polite">
     <span class="status-dot" aria-hidden="true"></span>
     <div>
-      <strong id="overallStatus">Diagnostics ready</strong>
-      <p id="overallDetail">This page checks the browser only. No exploit or HEN is integrated.</p>
+      <strong id="overallStatus">Checking browser…</strong>
+      <p id="overallDetail">Reading the browser firmware string. No exploit or payload is launched.</p>
     </div>
+    <span class="status-code" id="autoStatus">AUTO CHECK</span>
   </section>
 
   <section class="panel" aria-labelledby="deviceHeading">
     <div class="section-heading">
       <div><p class="eyebrow">01 / DEVICE</p><h2 id="deviceHeading">Environment</h2></div>
-      <button class="button button-primary" id="check">Check console</button>
+      <button class="button button-primary" id="check">Recheck console</button>
     </div>
     <dl class="facts">
-      <div><dt>Environment</dt><dd id="environment">Not checked</dd></div>
+      <div><dt>Environment</dt><dd id="environment">Checking…</dd></div>
       <div><dt>Firmware</dt><dd id="firmware">Unknown</dd></div>
       <div><dt>WebKit</dt><dd id="webkit">Unknown</dd></div>
-      <div><dt>Browser entry</dt><dd class="blocked" id="entry">Not integrated</dd></div>
+      <div><dt>Entry point</dt><dd class="blocked" id="entry">Not integrated</dd></div>
     </dl>
+  </section>
+
+  <section class="panel" aria-labelledby="versionsHeading">
+    <div class="section-heading">
+      <div><p class="eyebrow">02 / FIRMWARE MAP</p><h2 id="versionsHeading">Public support status</h2></div>
+      <span class="tag tag-info">Community reference</span>
+    </div>
+    <p class="section-note">Support varies by exact firmware and exploit method. This page reports status; it does not launch jailbreaks for any version.</p>
+    <div class="version-table" role="table" aria-label="Firmware support status">
+      <div class="version-row version-head" role="row"><span role="columnheader">Firmware</span><span role="columnheader">Public scene status</span><span role="columnheader">This host</span></div>
+      <div class="version-row" role="row" id="rangeLegacy"><strong>5.05–12.02</strong><span>Firmware-specific community methods</span><span class="tag tag-info">Reference only</span></div>
+      <div class="version-row" role="row" id="rangeRecent"><strong>13.00–13.52</strong><span>Public methods for listed builds; Relapse chain through 13.52</span><span class="tag tag-info">Reference only</span></div>
+      <div class="version-row active-row" role="row" id="range1400"><strong>14.00</strong><span>No public, reproducible full chain found</span><span class="tag tag-blocked">Diagnostics only</span></div>
+      <div class="version-row" role="row" id="rangeOther"><strong>Other / unknown</strong><span>Not classified by this status table</span><span class="tag tag-muted">Check exact FW</span></div>
+    </div>
+    <p class="selection-note" id="versionNote" aria-live="polite">Detected target: 14.00 · exploit launch unavailable.</p>
   </section>
 
   <section class="panel" aria-labelledby="chainHeading">
     <div class="section-heading">
-      <div><p class="eyebrow">02 / STATUS</p><h2 id="chainHeading">Execution stages</h2></div>
-      <span class="tag tag-blocked">Research only</span>
+      <div><p class="eyebrow">03 / EXECUTION CHAIN</p><h2 id="chainHeading">Readiness</h2></div>
+      <span class="tag tag-blocked">Auto launch unavailable</span>
     </div>
     <ol class="stages">
-      <li><span class="stage-number">1</span><div><strong>Browser entry</strong><p>Firmware-specific userland exploit</p></div><span class="tag tag-blocked">Missing</span></li>
-      <li><span class="stage-number">2</span><div><strong>Kernel access</strong><p>Exploit chain to reach kernel code</p></div><span class="tag tag-blocked">Missing</span></li>
-      <li><span class="stage-number">3</span><div><strong>Kernel patches</strong><p>14.00 offsets are in experimental PS4-HEN pre-release 182</p></div><span class="tag tag-pending">Experimental</span></li>
-      <li><span class="stage-number">4</span><div><strong>HEN payload</strong><p>Experimental PS4-HEN binary is present; release hash can be checked</p></div><span class="tag tag-pending">Experimental</span></li>
+      <li><span class="stage-number">01</span><div><strong>Browser entry</strong><p>Firmware-specific userland exploit</p></div><span class="tag tag-blocked">Missing</span></li>
+      <li><span class="stage-number">02</span><div><strong>Kernel access</strong><p>Verified kernel exploit chain</p></div><span class="tag tag-blocked">Missing</span></li>
+      <li><span class="stage-number">03</span><div><strong>Kernel patches</strong><p>14.00 offsets appear in experimental PS4-HEN source</p></div><span class="tag tag-pending">Experimental</span></li>
+      <li><span class="stage-number">04</span><div><strong>HEN payload</strong><p>Artifact can be checked; execution is not integrated</p></div><span class="tag tag-pending">Unverified</span></li>
     </ol>
-    <p class="callout"><strong>Execution is disabled.</strong> Browser entry and kernel access are missing. The HEN artifact and offsets are experimental components, not a tested 14.00 jailbreak chain.</p>
-    <p class="source-link"><a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">PS4-HEN pre-release-main-182 source and release</a></p>
+    <p class="callout"><strong>Automatic payload injection is disabled.</strong> The browser entry and kernel stages are missing for 14.00. Offsets or a matching payload do not make a working jailbreak.</p>
+    <p class="source-link"><a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">View the experimental PS4-HEN source and release</a></p>
   </section>
 
   <section class="panel" aria-labelledby="checksHeading">
     <div class="section-heading">
-      <div><p class="eyebrow">03 / BROWSER ONLY</p><h2 id="checksHeading">Safe checks</h2></div>
+      <div><p class="eyebrow">04 / SAFE TOOLS</p><h2 id="checksHeading">Browser checks</h2></div>
     </div>
     <div class="button-row">
-      <button class="button" id="runProbe">Check browser capabilities</button>
-      <button class="button" id="runStress">Run safe regression checks</button>
+      <button class="button" id="runProbe">Check capabilities</button>
+      <button class="button" id="runStress">Run safe checks</button>
       <button class="button" id="exportLog">Show report</button>
     </div>
     <dl class="facts compact">
       <div><dt>Capability probe</dt><dd id="probe">Not run</dd></div>
-      <div><dt>Regression checks</dt><dd id="stress">Not run</dd></div>
+      <div><dt>Safe checks</dt><dd id="stress">Not run</dd></div>
     </dl>
-    <pre id="log" aria-live="polite">Research host initialized. No payload will be executed.</pre>
+    <pre id="log" aria-live="polite">Starting automatic browser check. Payload execution is disabled.</pre>
   </section>
 
   <footer>
-    <p>This host performs local browser diagnostics. Results do not confirm exploit compatibility or HEN support.</p>
-    <a href="experiment.html">Verify the experimental HEN artifact</a>
+    <p><span class="footer-mark">ORBIT HUD / v2.7</span> Results describe browser and public source status only; they do not confirm exploit compatibility.</p>
+    <div class="footer-links"><a href="SOURCE-AUDIT-14.00.md">Read the 14.00 source audit</a><a href="experiment.html">Verify the experimental HEN artifact</a></div>
   </footer>
 </main>
-<script src="host.js"></script>
+<script src="host.js?v=2.7"></script>
 </body>
 </html>
