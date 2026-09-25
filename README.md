@@ -1,15 +1,15 @@
-# PS4 14.00 Research Host v2.4
+# PS4 14.00 Research Host v2.5
 
-Static GitHub Pages browser diagnostics for a PS4 reporting firmware 14.00.
+A static GitHub Pages browser diagnostics page for a PS4 reporting firmware 14.00. It provides environment detection, browser capability probes, small safe regression checks, a stage-status view, and a text report.
 
-## GoldHEN status
+## Execution status
 
-As checked on 2026-09-24, the [official GoldHEN releases](https://github.com/GoldHEN/GoldHEN/releases) list no firmware 14.00 support. The latest release shown there is beta v2.4b18 (supported firmware through 11.00); GitHub marks v2.3 as the latest stable release. This host does not contain an exploit or a GoldHEN loader.
+This repository does not include a browser entry exploit or an integrated HEN loader. The 14.00 `kpatch` source is a kernel patch stage and cannot start by itself. This host deliberately does not execute payloads. A green browser check only reports browser behavior; it does not establish exploit or HEN compatibility.
 
-Firmware detection and passing JavaScript regression checks do not imply that GoldHEN can execute. The separate [Scene-Collective PS4-HEN source](https://github.com/Scene-Collective/ps4-hen/tree/main/kpayload) includes `offsets/1400.c` and a firmware 1400 selector as of commit `d077fb4` (2026-09-19). That is PS4-HEN, not GoldHEN. The [pre-release-main-182](https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182) from the same commit provides a `hen.bin` asset (500,448 bytes). Its README still states support through 12.02, so the release should be treated as experimental for 14.00. The binary does not supply a browser or kernel entry point for this GitHub Pages host. The earlier `payloads/hen-1400.bin` placeholder was removed because the host cannot execute it. Do not rename a payload for another firmware and attempt to load it.
+The attached GoldHEN documentation lists support through firmware 13.52. The public PS4-HEN project currently documents support through 12.02, although experimental 14.00 offsets have appeared in its source history. Neither fact supplies the missing browser entry for this host.
 
-When a tested 14.00 compatible release and execution path are published, update this host using the publisher's instructions and verify on the console.
+## Publish to GitHub Pages
 
-## PS4 test
+Upload `index.html`, `host.js`, `style.css`, `experiment.html`, `experiment.js`, and the `payloads/` directory to the repository root. Enable GitHub Pages for that branch, then open the published page in the PS4 browser. The page should show **v2.5**. If an older version appears, refresh the browser cache or change the page URL query, for example `?v=2.5`.
 
-Upload `index.html`, `host.js`, `style.css`, and `README.md` to the root of your GitHub repository. Refresh GitHub Pages on the PS4. The page should read **v2.4** and report firmware 14.00. The environment, capability and regression buttons test the browser only; they never start HEN. If the page still reads v2.3, the new files have not been published or the browser is showing a cached copy.
+The buttons on the main page only inspect browser properties, run bounded JavaScript checks, or display a report. The integration experiment only checks whether expected files are present and has no execution path.

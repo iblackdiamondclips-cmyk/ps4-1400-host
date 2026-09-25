@@ -1,38 +1,78 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 14.00 Research Host v2.4</title>
+<meta name="theme-color" content="#0c1d38">
+<title>PS4 14.00 Research Host</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
-<h1>PS4 14.00 Research Host v2.4</h1>
-<p class="sub">14.00 browser diagnostics and GoldHEN compatibility status</p>
-<table>
-<tr><td>Environment</td><td id="environment">Not checked</td></tr>
-<tr><td>Firmware</td><td id="firmware">Unknown</td></tr>
-<tr><td>WebKit</td><td id="webkit">Unknown</td></tr>
-<tr><td>Capability probe</td><td id="probe">Not run</td></tr>
-<tr><td>Regression tests</td><td id="stress">Not run</td></tr>
-<tr><td>GoldHEN on 14.00</td><td>Not supported by published official release</td></tr>
-<tr><td>Userland entry</td><td id="userland">Not integrated</td></tr>
-<tr><td>Kernel execution</td><td id="kernel">Not integrated</td></tr>
-<tr><td>14.00 kpatch</td><td id="kpatch">Gated</td></tr>
-<tr><td>HEN execution</td><td id="henExec">Gated</td></tr>
-</table>
+<main class="shell">
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">PS4</div>
+    <div>
+      <p class="eyebrow">BROWSER RESEARCH HOST</p>
+      <h1>Firmware 14.00</h1>
+    </div>
+    <span class="version">v2.5</span>
+  </header>
 
-<div class="buttons">
-<button id="check">Check environment</button>
-<button id="runProbe">Run capability probe</button>
-<button id="runStress">Run safe regression tests</button>
-<button id="exportLog">Export log to screen</button>
-</div>
+  <section class="status-banner" aria-live="polite">
+    <span class="status-dot" aria-hidden="true"></span>
+    <div>
+      <strong id="overallStatus">Diagnostics ready</strong>
+      <p id="overallDetail">This page checks the browser only. No exploit or HEN is integrated.</p>
+    </div>
+  </section>
 
-<pre id="log">Host v2.3 initialized.</pre>
-<p class="note">This page checks browser properties only. It cannot enable HEN on firmware 14.00. Scene-Collective PS4-HEN has a 14.00 pre-release binary, but this host has no execution entry point.
-See <a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">Scene-Collective PS4-HEN pre-release-main-182</a>. The <a href="https://github.com/GoldHEN/GoldHEN/releases">official GoldHEN releases</a> list supported firmware; use only a release that explicitly lists 14.00 and a compatible execution method when available.</p>
+  <section class="panel" aria-labelledby="deviceHeading">
+    <div class="section-heading">
+      <div><p class="eyebrow">01 / DEVICE</p><h2 id="deviceHeading">Environment</h2></div>
+      <button class="button button-primary" id="check">Check console</button>
+    </div>
+    <dl class="facts">
+      <div><dt>Environment</dt><dd id="environment">Not checked</dd></div>
+      <div><dt>Firmware</dt><dd id="firmware">Unknown</dd></div>
+      <div><dt>WebKit</dt><dd id="webkit">Unknown</dd></div>
+      <div><dt>Browser entry</dt><dd class="blocked" id="entry">Not integrated</dd></div>
+    </dl>
+  </section>
+
+  <section class="panel" aria-labelledby="chainHeading">
+    <div class="section-heading">
+      <div><p class="eyebrow">02 / STATUS</p><h2 id="chainHeading">Execution stages</h2></div>
+      <span class="tag tag-blocked">Research only</span>
+    </div>
+    <ol class="stages">
+      <li><span class="stage-number">1</span><div><strong>Browser entry</strong><p>Firmware-specific userland exploit</p></div><span class="tag tag-blocked">Missing</span></li>
+      <li><span class="stage-number">2</span><div><strong>Kernel access</strong><p>Exploit chain to reach kernel code</p></div><span class="tag tag-blocked">Missing</span></li>
+      <li><span class="stage-number">3</span><div><strong>Kernel patches</strong><p>14.00 patch source supplied separately</p></div><span class="tag tag-pending">Not run</span></li>
+      <li><span class="stage-number">4</span><div><strong>HEN payload</strong><p>Compatible, tested firmware build</p></div><span class="tag tag-blocked">Missing</span></li>
+    </ol>
+    <p class="callout"><strong>Execution is disabled.</strong> A 14.00 kernel patch is not a browser entry point, and this host does not load payloads.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="checksHeading">
+    <div class="section-heading">
+      <div><p class="eyebrow">03 / BROWSER ONLY</p><h2 id="checksHeading">Safe checks</h2></div>
+    </div>
+    <div class="button-row">
+      <button class="button" id="runProbe">Check browser capabilities</button>
+      <button class="button" id="runStress">Run safe regression checks</button>
+      <button class="button" id="exportLog">Show report</button>
+    </div>
+    <dl class="facts compact">
+      <div><dt>Capability probe</dt><dd id="probe">Not run</dd></div>
+      <div><dt>Regression checks</dt><dd id="stress">Not run</dd></div>
+    </dl>
+    <pre id="log" aria-live="polite">Research host initialized. No payload will be executed.</pre>
+  </section>
+
+  <footer>
+    <p>This host performs local browser diagnostics. Results do not confirm exploit compatibility or HEN support.</p>
+    <a href="experiment.html">Open file integration checks</a>
+  </footer>
 </main>
 <script src="host.js"></script>
 </body>
