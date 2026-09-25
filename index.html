@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07101f">
 <meta name="description" content="PS4 browser diagnostics and public firmware compatibility status.">
-<title>PS4 Research HUD · Firmware Map</title>
-<link rel="stylesheet" href="style.css?v=2.8">
+<title>PS4 Jailbreak Host · Firmware Map</title>
+<link rel="stylesheet" href="style.css?v=2.9">
 </head>
 <body>
 <main class="shell">
@@ -34,8 +34,8 @@
     <div class="hero-state">
       <span class="state-icon" aria-hidden="true">!</span>
       <span class="state-label">CURRENT MODE</span>
-      <strong>Research only</strong>
-      <span class="state-detail">No exploit will run</span>
+      <strong>Host selector</strong>
+      <span class="state-detail">No exploit starts on this screen</span>
     </div>
     <div class="hero-grid" aria-hidden="true"></div>
   </section>
@@ -67,7 +67,7 @@
       <div><p class="eyebrow">02 / FIRMWARE MAP</p><h2 id="versionsHeading">Public support status</h2></div>
       <span class="tag tag-info">Community reference</span>
     </div>
-    <p class="section-note">Support varies by exact firmware and exploit method. This page reports status; it does not launch jailbreaks for any version.</p>
+    <p class="section-note">Support varies by exact firmware and exploit method. Matching routes open in the integrated host or a legacy host; you start the exploit there manually.</p>
     <div class="version-table" role="table" aria-label="Firmware support status">
       <div class="version-row version-head" role="row"><span role="columnheader">Firmware</span><span role="columnheader">Published chain / status</span><span role="columnheader">Evidence</span></div>
       <div class="version-row" role="row" id="fw505"><strong>5.05</strong><span>Legacy exploit route; GoldHEN release exists. Separate host required.</span><span class="tag tag-info">Reference</span></div>
@@ -84,8 +84,9 @@
     </div>
     <p class="selection-note" id="versionNote" aria-live="polite">Checking the exact firmware against published compatibility ranges…</p>
     <div class="route-card" id="routeCard">
-      <div><strong id="routeTitle">This page is a status guide</strong><p id="routeDetail">It does not run exploits. For firmware with a listed chain, open the upstream host yourself.</p></div>
-      <a id="upstreamHost" class="button button-primary" href="https://webkitty.arabpixel.net/" target="_blank" rel="noopener noreferrer" hidden>Open upstream host</a>
+      <div><strong id="routeTitle">Choose the matching route</strong><p id="routeDetail">The firmware check selects a matching host link. An exploit starts only after you open that host and choose its launch control.</p></div>
+      <a id="upstreamHost" class="button button-primary" href="webkitty/index.html" hidden>Open integrated jailbreak host</a>
+      <a id="legacyHost" class="button button-primary" href="https://gamerhack.github.io/505/index.html" target="_blank" rel="noopener noreferrer" hidden>Open 5.05 GoldHEN host</a>
     </div>
     <p class="section-note goldhen-note"><strong>GoldHEN is a separate compatibility check.</strong> An exploit chain working on a firmware does not by itself prove that every GoldHEN build supports it. The upstream host offers a GoldHEN selection; use only a build explicitly listed for your exact firmware.</p>
     <p class="source-link"><a href="https://github.com/ArabPixel/WebKitty#supported-by-this-repository" target="_blank" rel="noopener noreferrer">Upstream exploit-chain matrix</a> · <a href="https://github.com/GoldHEN/GoldHEN/releases" target="_blank" rel="noopener noreferrer">GoldHEN release compatibility</a></p>
@@ -97,12 +98,12 @@
       <span class="tag tag-info">Status guide only</span>
     </div>
     <ol class="stages">
-      <li><span class="stage-number">01</span><div><strong>Browser entry</strong><p>Not bundled; upstream link appears for listed chain ranges</p></div><span class="tag tag-info">External</span></li>
-      <li><span class="stage-number">02</span><div><strong>Kernel chain</strong><p>Selected by the upstream host for its listed firmware ranges</p></div><span class="tag tag-info">External</span></li>
-      <li><span class="stage-number">03</span><div><strong>Kernel patches</strong><p>Not executed by this diagnostics page</p></div><span class="tag tag-muted">Not bundled</span></li>
-      <li><span class="stage-number">04</span><div><strong>GoldHEN / HEN</strong><p>Use a build explicitly marked for the detected firmware</p></div><span class="tag tag-pending">Verify build</span></li>
+      <li><span class="stage-number">01</span><div><strong>Browser entry</strong><p>WebKitty source is included under <code>webkitty/</code></p></div><span class="tag tag-info">Included</span></li>
+      <li><span class="stage-number">02</span><div><strong>Kernel chain</strong><p>Firmware-based chain selection for listed ranges</p></div><span class="tag tag-info">Included</span></li>
+      <li><span class="stage-number">03</span><div><strong>Kernel patches</strong><p>Uses upstream firmware-specific patch files</p></div><span class="tag tag-info">Included</span></li>
+      <li><span class="stage-number">04</span><div><strong>GoldHEN / HEN</strong><p>Select a payload version matched to the console firmware</p></div><span class="tag tag-pending">Check version</span></li>
     </ol>
-    <p class="callout"><strong>This page never auto-launches or injects a payload.</strong> It is a firmware guide with a manual link to an upstream host. For 14.00, the checked offsets/artifact still do not establish a working exploit chain.</p>
+    <p class="callout"><strong>The landing page does not auto-launch or inject a payload.</strong> The integrated host runs only after you open it and select its launch control. For 14.00, the checked offsets/artifact still do not establish a working exploit chain.</p>
     <p class="source-link"><a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">View the experimental PS4-HEN source and release</a></p>
   </section>
 
@@ -123,10 +124,10 @@
   </section>
 
   <footer>
-    <p><span class="footer-mark">ORBIT HUD / v2.8</span> Upstream ranges are reported as published; exploit attempts can still fail or crash. This host itself only reports status.</p>
+    <p><span class="footer-mark">ORBIT HUD / v2.9</span> Firmware chains and payloads come from the linked upstream projects; attempts can still fail or crash.</p>
     <div class="footer-links"><a href="SOURCE-AUDIT-14.00.md">Read the 14.00 source audit</a><a href="experiment.html">Verify the experimental HEN artifact</a></div>
   </footer>
 </main>
-<script src="host.js?v=2.8"></script>
+<script src="host.js?v=2.9"></script>
 </body>
 </html>

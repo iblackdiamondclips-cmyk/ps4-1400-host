@@ -2,7 +2,7 @@
   'use strict';
 
   var logEl = document.getElementById('log');
-  var lastLog = 'ORBIT FIELD HUD v2.8 initialized. No payload will be executed.';
+  var lastLog = 'ORBIT FIELD HUD v2.9 initialized. Payloads start only from the selected host.';
 
   function set(id, value) {
     var el = document.getElementById(id);
@@ -87,14 +87,19 @@
 
     for (i = 0; i < matches.length; i++) setVersionRow(matches[i], true);
     var upstreamLink = document.getElementById('upstreamHost');
+    var legacyLink = document.getElementById('legacyHost');
     var routeTitle = document.getElementById('routeTitle');
     var routeDetail = document.getElementById('routeDetail');
     var hasChain = matches.some(function (id) { return id !== 'fw505' && id !== 'range1400' && id !== 'rangeOther'; });
+    var legacy505 = matches.indexOf('fw505') !== -1;
     if (upstreamLink) upstreamLink.hidden = !hasChain;
-    if (routeTitle) routeTitle.textContent = hasChain ? 'Published chain listed for this firmware' : 'No matching browser chain is listed here';
+    if (legacyLink) legacyLink.hidden = !legacy505;
+    if (routeTitle) routeTitle.textContent = hasChain ? 'Jailbreak chain listed for this firmware' : (legacy505 ? 'Legacy 5.05 route available' : 'No matching jailbreak route listed');
     if (routeDetail) routeDetail.textContent = hasChain
-      ? 'Open the upstream host manually to review its firmware detection and options. This HUD will not start the exploit.'
-      : 'This page will not run an exploit. Check the exact version and its listed source before choosing another route.';
+      ? 'This host contains the upstream WebKitty chain and GoldHEN selector for the listed range. The exploit starts only when you use its launch control.'
+      : (legacy505
+        ? '5.05 uses its own legacy host. The 5.05 route is separate from the integrated 6.70–13.52 chains.'
+        : 'This page will not start a payload for this firmware. Check the exact release and its published exploit status.');
     set('versionNote', note);
   }
 
@@ -113,13 +118,13 @@
       ? 'Browser entry and kernel access are not integrated. Automatic payload injection is disabled.'
       : 'This automatic check reads browser details only. No exploit or HEN is launched.');
     updateVersionMap(info.firmware);
-    lastLog = 'ORBIT FIELD HUD v2.8 / environment check';
+    lastLog = 'ORBIT FIELD HUD v2.9 / environment check';
     log('PlayStation browser: ' + (isPS4 ? 'yes' : 'not detected'));
     log('Firmware: ' + info.firmware);
     log('WebKit: ' + info.webkit);
     log('Support map: checked against published upstream ranges');
-    log('This host: diagnostics only; exploit launch remains disabled');
-    log('Payload execution: disabled');
+    log('Compatible chain ranges: highlighted in the firmware map');
+    log('Launch is manual from the selected host');
   }
 
   function probe() {
@@ -187,14 +192,15 @@
   function report() {
     var info = uaInfo();
     var reportText = [
-      'ORBIT FIELD HUD v2.8 · PS4 Research Host',
+      'ORBIT FIELD HUD v2.9 · PS4 Jailbreak Host',
       'Timestamp: ' + new Date().toISOString(),
       'Firmware: ' + info.firmware,
       'WebKit: ' + info.webkit,
       'URL: ' + location.href,
-      'Browser entry: not integrated',
-      'Kernel execution: disabled',
-      'HEN execution: disabled',
+      'Landing page: firmware selector only',
+      'Integrated WebKitty host: available for its published firmware ranges',
+      'Exploit launch: manual in selected host; not run from landing page',
+      '14.00: diagnostics only; no verified full chain',
       '', lastLog
     ].join('\n');
     logEl.textContent = reportText;

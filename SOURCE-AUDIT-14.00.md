@@ -24,7 +24,9 @@ Firmware 5.05 has legacy methods and an official GoldHEN release target, but it 
 
 ## GoldHEN status
 
-GoldHEN has its own firmware-specific releases. Its GitHub release notes list supported firmware separately from the exploit host. WebKitty offers a GoldHEN/HEN selection, but that does not establish that one GoldHEN binary is compatible with every chain or every firmware through 13.52. The HUD therefore does not label GoldHEN as verified for a firmware solely because a kernel exploit chain is listed. Use only the exact HEN build and compatibility information published for the target firmware.
+GoldHEN has its own firmware-specific releases. Its GitHub release notes list supported firmware separately from the exploit host. The bundled WebKitty source includes GoldHEN payload files through v2.4b18.12; its firmware selector leaves the GoldHEN option enabled on 13.52 and defaults newer builds to v2.4b18.12. This shows that the upstream host intends a GoldHEN route through 13.52. I have verified the source files are included, but have not run the binaries on a console. Treat the exact HEN result as upstream-provided, not as a test performed by this project.
+
+The HUD links 5.05 to a separate published GamerHack host because WebKitty's own exploit-chain table starts at 6.70. Firmware below 6.70 other than 5.05 is not bundled here.
 
 ## Firmware 14.00
 
@@ -35,6 +37,8 @@ GoldHEN has its own firmware-specific releases. Its GitHub release notes list su
 ## Upstream references
 
 - [ArabPixel/WebKitty firmware compatibility matrix](https://github.com/ArabPixel/WebKitty#supported-by-this-repository)
+- Bundled upstream snapshot: [ArabPixel/WebKitty](https://github.com/ArabPixel/WebKitty), commit `10f671dda5f3b28c26f41d5a37e19d15bf3fe662` (2026-09-22), license and full source under `webkitty/`.
+- [GamerHack 5.05 host](https://gamerhack.github.io/505/index.html)
 - [RawGame PS4 WebKit host (11.00–13.00)](https://github.com/rawgame4/rawgame4.github.io)
 - [Raw13G PS4 host](https://raw13g.github.io/)
 - [GoldHEN releases](https://github.com/GoldHEN/GoldHEN/releases)
