@@ -1,19 +1,26 @@
-# PS4 14.00 Research Host v2.7
+# PS4 Research HUD v2.8
 
-A static GitHub Pages browser diagnostics page for a PS4 reporting firmware 14.00. Version 2.7 refreshes the HUD, shows local time and a firmware status map, and automatically checks browser/firmware details on page load. It provides browser capability probes, safe regression checks, a stage-status view, a text report, and a check for the experimental PS4-HEN binary.
+ORBIT is a static browser diagnostics page and firmware guide. It detects the browser's reported firmware, highlights the published upstream exploit-chain ranges, and links to the upstream WebKitty host for a manual visit. It does not contain or launch those exploit chains.
 
-## Execution status
+## Firmware map and limitations
 
-This repository does not include a 14.00 browser entry exploit or an integrated HEN loader. The 14.00 `kpatch` source is a kernel patch stage and cannot start by itself. Automatic exploit/payload injection is unavailable and disabled. The page's automatic action only reads browser and firmware details; a green browser check does not establish exploit or HEN compatibility.
+The firmware rows reflect the compatibility table currently published by [ArabPixel/WebKitty](https://github.com/ArabPixel/WebKitty#supported-by-this-repository): 6.70–6.72, 7.00–9.60, 7.00–11.02, 9.00–11.02, 11.00–12.02, 12.50–13.00, and 13.02–13.52. Some ranges overlap because the upstream host offers more than one chain. The table marks 5.05 as a legacy route outside that matrix. Gaps are not silently treated as supported.
 
-The public PS4-HEN `pre-release-main-182` source now includes a 14.00 offset table and builds its kernel-payload component, but this remains experimental and is not a GoldHEN build. GoldHEN's upstream README says its source is private. See [SOURCE-AUDIT-14.00.md](SOURCE-AUDIT-14.00.md) for the source comparison and remaining prerequisites.
+WebKitty's README describes its listed chains as functional and tested, but its exploit can fail and crash/reboot the console. This project makes no success-rate promise. Its automatic check only reads browser information; a firmware match does not start a jailbreak.
 
-Scene-Collective's `pre-release-main-182` adds 14.00 offsets, sets `MAX_FW` to 1400, and publishes an experimental `hen.bin`. The local `payloads/hen.bin` in this repository has SHA-256 `c05f6097dbc0707e8ec2fb5443ee507da6ac6e79c6fa8e9f78544658710efeff`, matching the digest reported for that release asset. The README still lists normal support through 12.02, so treat the 14.00 work as experimental. This artifact does not supply the browser entry or a tested 14.00 execution chain. The GoldHEN files supplied separately list support through 13.52.
+GoldHEN compatibility is separate from exploit-chain compatibility. The upstream GoldHEN release page has its own firmware list, while WebKitty offers a GoldHEN selection. Neither fact establishes that one GoldHEN binary works on every firmware through 13.52. Use a build explicitly matched to the exact firmware. This project does not bundle GoldHEN or claim an official 13.52 GoldHEN build.
 
-On 24 September 2026, `ps4-payload-dev/elfldr` merged 13.52/14.00 payload-loader support. This is a downstream loader component; it does not supply a 14.00 browser/BD-J entry point or kernel exploit. See the updated [source audit](SOURCE-AUDIT-14.00.md).
+Firmware 14.00 remains **diagnostics only** in this project. Experimental kernel offsets, a payload loader, or a matching HEN artifact do not supply the missing entry-to-kernel exploit chain.
 
 ## Publish to GitHub Pages
 
-Upload `index.html`, `host.js`, `style.css`, `experiment.html`, `experiment.js`, and the `payloads/` directory to the repository root. Enable GitHub Pages for that branch, then open the published page in the PS4 browser. The page should show **ORBIT · FIELD HUD / v2.7**. If an older version appears, refresh the browser cache or change the page URL query, for example `?v=2.7`.
+Upload `index.html`, `host.js`, `style.css`, `experiment.html`, `experiment.js`, `README.md`, `SOURCE-AUDIT-14.00.md`, and the `payloads/` directory to the repository root. Enable GitHub Pages for that branch. The page should show **ORBIT · FIELD HUD / v2.8**. If an older copy appears, refresh the browser cache or add `?v=2.8` to the URL.
 
-The buttons on the main page only inspect browser properties, run bounded JavaScript checks, or display a report. The experiment page checks the local `hen.bin` size and SHA-256 against the recorded release asset when Web Crypto is available. It has no execution path.
+The **Open upstream host** button appears only when the detected firmware matches a range in the checked WebKitty matrix. It is a manual external link. Browser checks, report export, and the artifact verifier do not execute a payload. `experiment.html` only checks the included artifact's size and SHA-256.
+
+## Sources
+
+- [WebKitty compatibility and deployment notes](https://github.com/ArabPixel/WebKitty#supported-by-this-repository)
+- [RawGame 11.00–13.00 host and hardware-tested range](https://github.com/rawgame4/rawgame4.github.io)
+- [GoldHEN releases](https://github.com/GoldHEN/GoldHEN/releases)
+- [14.00 source audit](SOURCE-AUDIT-14.00.md)
