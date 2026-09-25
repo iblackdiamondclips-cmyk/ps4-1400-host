@@ -6,6 +6,8 @@ A static GitHub Pages browser diagnostics page for a PS4 reporting firmware 14.0
 
 This repository does not include a 14.00 browser entry exploit or an integrated HEN loader. The 14.00 `kpatch` source is a kernel patch stage and cannot start by itself. This host deliberately does not execute payloads. A green browser check only reports browser behavior; it does not establish exploit or HEN compatibility.
 
+The public PS4-HEN `pre-release-main-182` source now includes a 14.00 offset table and builds its kernel-payload component, but this remains experimental and is not a GoldHEN build. GoldHEN's upstream README says its source is private. See [SOURCE-AUDIT-14.00.md](SOURCE-AUDIT-14.00.md) for the source comparison and remaining prerequisites.
+
 Scene-Collective's `pre-release-main-182` adds 14.00 offsets, sets `MAX_FW` to 1400, and publishes an experimental `hen.bin`. The local `payloads/hen.bin` in this repository has SHA-256 `c05f6097dbc0707e8ec2fb5443ee507da6ac6e79c6fa8e9f78544658710efeff`, matching the digest reported for that release asset. The README still lists normal support through 12.02, so treat the 14.00 work as experimental. This artifact does not supply the browser entry or a tested 14.00 execution chain. The GoldHEN files supplied separately list support through 13.52.
 
 ## Publish to GitHub Pages
