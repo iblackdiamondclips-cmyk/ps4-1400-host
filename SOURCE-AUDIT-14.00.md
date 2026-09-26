@@ -30,9 +30,9 @@ The HUD links 5.05 to a separate published GamerHack host because WebKitty's own
 
 ## Firmware 14.00
 
-- Scene-Collective's PS4-HEN `pre-release-main-182` includes a 14.00 offset table and a `hen.bin` artifact, but the repository README's normal support range remains 5.05–12.02. Treat the 14.00 offsets and artifact as experimental; this is not GoldHEN.
+- Scene-Collective's PS4-HEN `pre-release-main-182` includes a 14.00 offset table and a `hen.bin` artifact, but the repository README's normal support range remains 5.05–12.02. Treat the 14.00 offsets and artifact as experimental; this is not GoldHEN. The experimental binary and its verifier page are excluded from the ORBIT package.
 - Public `elfldr` 14.00 firmware handling is payload-loader compatibility for an already jailbroken environment. It does not provide browser/BD-J entry or kernel access.
-- The checked public sources do not provide a reproducible, tested 14.00 browser/BD-J-to-kernel chain. The host therefore keeps 14.00 in diagnostics-only mode and keeps automatic execution disabled.
+- The checked public sources do not provide a reproducible, tested 14.00 browser/BD-J-to-kernel chain. The host therefore labels 14.00 “Coming soon”, exposes no launch link for it, and keeps automatic execution disabled.
 
 ## Upstream references
 

@@ -1,217 +1,162 @@
 (function () {
   'use strict';
 
-  var logEl = document.getElementById('log');
-  var lastLog = 'ORBIT FIELD HUD v2.9 initialized. Payloads start only from the selected host.';
+  var byId = function (id) { return document.getElementById(id); };
+  var ua = (navigator && navigator.userAgent) ? navigator.userAgent : '';
+  var fwMatch = ua.match(/PlayStation\s*4(?:\s|\/|\s*\()([^;)\s]+)/i);
+  var fwText = fwMatch ? fwMatch[1] : '';
+  var fw = parseFloat(fwText);
+  var webkitMatch = ua.match(/AppleWebKit\/([\d.]+)/i);
+  var webkit = webkitMatch ? webkitMatch[1] : 'Άγνωστο';
+  var supportedRows = [];
+  var reportLines = [];
 
-  function set(id, value) {
-    var el = document.getElementById(id);
+  function setText(id, value) {
+    var el = byId(id);
     if (el) el.textContent = value;
   }
+  function setStatus(id, text, state) {
+    var el = byId(id);
+    if (!el) return;
+    el.textContent = text;
+    el.className = state;
+  }
+  function row(id, active) {
+    var el = byId(id);
+    if (el) {
+      if (active) el.classList.add('active-row');
+      else el.classList.remove('active-row');
+    }
+  }
+  function matchRange(low, high) { return fw >= low && fw <= high; }
 
-  function log(line) {
-    lastLog += '\n' + line;
-    logEl.textContent = lastLog;
+  function checkFirmware() {
+    supportedRows = [];
+    var hero = byId('heroState');
+    var upstream = byId('upstreamHost');
+    var legacy = byId('legacyHost');
+    if (upstream) upstream.hidden = true;
+    if (legacy) legacy.hidden = true;
+    ['fw505', 'fwLegacy', 'fw670', 'fw960', 'fw1102lapse', 'fw1102netctrl', 'fw1202', 'fw1300', 'fw1352', 'range1400', 'rangeOther'].forEach(function (id) { row(id, false); });
+
+    setText('environment', /PlayStation 4/i.test(ua) ? 'PlayStation 4 browser' : 'Άγνωστο περιβάλλον');
+    setText('webkit', webkit);
+    setText('firmware', fwText || 'Άγνωστο');
+    setText('heroFirmware', fwText || 'Άγνωστο');
+
+    if (isFinite(fw) && Math.abs(fw - 5.05) < 0.001) {
+      row('fw505', true);
+      if (legacy) legacy.hidden = false;
+      setStatus('entry', 'Legacy host διαθέσιμο', 'warn');
+      setText('overallStatus', 'Legacy host 5.05');
+      setText('overallDetail', 'Ανοίγει ξεχωριστό host. Η κάλυψη δεν προέρχεται από το WebKitty.');
+      setText('routeTitle', 'Firmware 5.05 · ξεχωριστός host');
+      setText('routeDetail', 'Το 5.05 δρομολογείται στον δημοσιευμένο GamerHack legacy host.');
+      setText('versionNote', 'Εντοπίστηκε 5.05. Επιλεγμένη η ξεχωριστή legacy διαδρομή.');
+      if (hero) hero.setAttribute('data-state', 'legacy');
+    } else if (isFinite(fw) && Math.abs(fw - 14.00) < 0.001) {
+      row('range1400', true);
+      setStatus('entry', 'Coming soon · χωρίς host', 'bad');
+      setText('overallStatus', '14.00 · Coming soon');
+      setText('overallDetail', 'Δεν υπάρχει ενσωματωμένη, επαληθευμένη αλυσίδα entry-to-kernel.');
+      setText('routeTitle', '14.00 · Coming soon');
+      setText('routeDetail', 'Δεν εμφανίζεται σύνδεσμος εκκίνησης για αυτή την έκδοση.');
+      setText('versionNote', 'Το 14.00 αναγνωρίζεται, αλλά δεν υποστηρίζεται από αυτό το πακέτο.');
+      if (hero) hero.setAttribute('data-state', 'coming');
+    } else if (isFinite(fw) && fw >= 6.70 && fw <= 13.52) {
+      if (matchRange(6.70, 6.72)) supportedRows.push(['fw670', '6.70–6.72 · Bad Hoist + Sleirsgoevy']);
+      if (matchRange(7.00, 9.60)) supportedRows.push(['fw960', '7.00–9.60 · PSFree + Lapse']);
+      if (matchRange(7.00, 11.02)) supportedRows.push(['fw1102lapse', '7.00–11.02 · CSSFontFace + Lapse']);
+      if (matchRange(9.00, 11.02)) supportedRows.push(['fw1102netctrl', '9.00–11.02 · CSSFontFace + Netctrl']);
+      if (matchRange(11.00, 12.02)) supportedRows.push(['fw1202', '11.00–12.02 · Slopkit + Lapse']);
+      if (matchRange(12.50, 13.00)) supportedRows.push(['fw1300', '12.50–13.00 · Slopkit + Netctrl']);
+      if (matchRange(13.02, 13.52)) supportedRows.push(['fw1352', '13.02–13.52 · Slopkit + Relapse']);
+
+      if (supportedRows.length) {
+        supportedRows.forEach(function (item) { row(item[0], true); });
+        if (upstream) upstream.hidden = false;
+        setStatus('entry', 'Δημοσιευμένο εύρος · upstream host', 'good');
+        setText('overallStatus', 'Αντιστοιχεί σε upstream εύρος');
+        setText('overallDetail', 'Η διαδρομή ανοίγει χειροκίνητα. Η επιτυχία δεν είναι εγγυημένη.');
+        setText('routeTitle', 'Άνοιγμα WebKitty για ' + fwText);
+        setText('routeDetail', supportedRows.map(function (item) { return item[1]; }).join(' · '));
+        setText('versionNote', 'Η έκδοση ' + fwText + ' αντιστοιχεί στα επισημασμένα εύρη.');
+        if (hero) hero.setAttribute('data-state', 'supported');
+      } else {
+        row('rangeOther', true);
+        setStatus('entry', 'Δεν υπάρχει αντιστοιχισμένη αλυσίδα', 'bad');
+        setText('overallStatus', 'Μη χαρτογραφημένη έκδοση');
+        setText('overallDetail', 'Η έκδοση βρίσκεται ανάμεσα στα όρια του πίνακα, αλλά δεν έχει δημοσιευμένη διαδρομή.');
+        setText('routeTitle', 'Δεν υπάρχει διαθέσιμη διαδρομή');
+        setText('routeDetail', 'Δεν εμφανίζεται κουμπί host για κενά όπως 12.03–12.49 ή 13.01.');
+        setText('versionNote', 'Δεν βρέθηκε ακριβής αντιστοίχιση για την έκδοση ' + fwText + '.');
+        if (hero) hero.setAttribute('data-state', 'unsupported');
+      }
+    } else {
+      row('rangeOther', true);
+      setStatus('entry', 'Άγνωστο ή μη υποστηριζόμενο', 'bad');
+      setText('overallStatus', 'Δεν υπάρχει host για αυτή την έκδοση');
+      setText('overallDetail', 'Ο πίνακας εμφανίζει μόνο ρητά δημοσιευμένα εύρη και το ξεχωριστό 5.05.');
+      setText('routeTitle', 'Δεν υπάρχει διαθέσιμη διαδρομή');
+      setText('routeDetail', 'Έλεγξε την έκδοση συστήματος και τον επίσημο πίνακα συμβατότητας.');
+      setText('versionNote', fwText ? 'Η έκδοση ' + fwText + ' δεν βρίσκεται στα δημοσιευμένα εύρη.' : 'Δεν εντοπίστηκε έκδοση firmware στο user agent.');
+      if (hero) hero.setAttribute('data-state', 'unsupported');
+    }
+    reportLines = [
+      'ORBIT FIELD HUD 3.0',
+      'Firmware: ' + (fwText || 'unknown'),
+      'WebKit: ' + webkit,
+      'Environment: ' + (/PlayStation 4/i.test(ua) ? 'PlayStation 4 browser' : 'unknown'),
+      'Matched routes: ' + (supportedRows.length ? supportedRows.map(function (item) { return item[1]; }).join('; ') : 'none'),
+      'Automatic exploit/payload execution: disabled'
+    ];
+    setText('log', reportLines.join('\n'));
   }
 
-  function uaInfo() {
-    var ua = navigator.userAgent || '';
-    var fw = ua.match(/PlayStation\s*4\s*([0-9]+\.[0-9]+)/i) ||
-      ua.match(/PlayStation(?:;|\s)+PlayStation 4\/([0-9.]+)/i);
-    var wk = ua.match(/AppleWebKit\/([0-9.]+)/i);
-    return { ua: ua, firmware: fw ? fw[1] : 'Unknown', webkit: wk ? wk[1] : 'Unknown' };
+  function probeBrowser() {
+    var tests = [
+      ['Promise', typeof window.Promise === 'function'],
+      ['TextEncoder', typeof window.TextEncoder === 'function'],
+      ['crypto.subtle', !!(window.crypto && window.crypto.subtle)],
+      ['localStorage', (function () { try { var k = '__orbit_probe'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } }())]
+    ];
+    var passed = tests.filter(function (test) { return test[1]; }).length;
+    setText('probe', passed + '/' + tests.length + ' διαθέσιμα');
+    setText('log', reportLines.concat(['Browser capabilities: ' + tests.map(function (test) { return test[0] + '=' + (test[1] ? 'yes' : 'no'); }).join(', '), 'These checks do not test exploitability.']).join('\n'));
+  }
+
+  function basicChecks() {
+    var checks = [
+      ['Σύνδεση stylesheet', !!document.querySelector('link[rel="stylesheet"]')],
+      ['Σύνδεση script', !!document.querySelector('script[src*="host.js"]')],
+      ['Firmware parser', !!fwText],
+      ['Χειροκίνητη εκκίνηση', true]
+    ];
+    var passed = checks.filter(function (check) { return check[1]; }).length;
+    setText('stress', passed + '/' + checks.length + ' έλεγχοι OK');
+    setText('log', reportLines.concat(['Basic page checks: ' + checks.map(function (check) { return check[0] + '=' + (check[1] ? 'OK' : 'missing'); }).join(', ')]).join('\n'));
   }
 
   function updateClock() {
     var now = new Date();
-    var timeEl = document.getElementById('clock');
-    var dateEl = document.getElementById('clockDate');
-    if (timeEl) {
-      try {
-        timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-      } catch (e) {
-        timeEl.textContent = now.toTimeString().slice(0, 8);
-      }
-    }
-    if (dateEl) {
-      try {
-        dateEl.textContent = now.toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' });
-      } catch (e2) {
-        dateEl.textContent = now.toDateString();
-      }
-    }
+    setText('clock', now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    setText('clockDate', now.toLocaleDateString([], { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }));
   }
 
-  function setVersionRow(id, active) {
-    var row = document.getElementById(id);
-    if (!row) return;
-    row.className = row.className.replace(/\s*active-row/g, '');
-    if (active) row.className += ' active-row';
-  }
+  var checkButton = byId('check');
+  if (checkButton) checkButton.addEventListener('click', checkFirmware);
+  var probeButton = byId('runProbe');
+  if (probeButton) probeButton.addEventListener('click', probeBrowser);
+  var basicButton = byId('runStress');
+  if (basicButton) basicButton.addEventListener('click', basicChecks);
+  var logButton = byId('exportLog');
+  if (logButton) logButton.addEventListener('click', function () {
+    setText('log', reportLines.join('\n'));
+    var log = byId('log');
+    if (log) log.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
 
-  function updateVersionMap(firmware) {
-    var version = parseFloat(firmware);
-    var note = 'Detected target: ' + firmware + ' · this page reports status and does not launch exploits.';
-    var matches = [];
-    var rowIds = ['fw505', 'fwLegacy', 'fw670', 'fw960', 'fw1102lapse', 'fw1102netctrl', 'fw1202', 'fw1300', 'fw1352', 'range1400', 'rangeOther'];
-    var i;
-    for (i = 0; i < rowIds.length; i++) setVersionRow(rowIds[i], false);
-
-    if (firmware === '14.00') {
-      matches = ['range1400'];
-      note = 'Detected target: 14.00 · diagnostics only; this page has no verified entry-to-kernel chain.';
-    } else if (!isNaN(version) && version === 5.05) {
-      matches = ['fw505'];
-      note = 'Detected target: 5.05 · a legacy route is required; it is not part of the linked WebKitty chain matrix.';
-    } else if (!isNaN(version) && version > 0 && version < 6.70) {
-      matches = ['fwLegacy'];
-      note = 'Detected target: ' + firmware + ' · legacy methods depend on the exact build; the linked WebKitty matrix does not cover it.';
-    } else if (!isNaN(version)) {
-      if (version >= 6.70 && version <= 6.72) matches.push('fw670');
-      if (version >= 7.00 && version <= 9.60) matches.push('fw960');
-      if (version >= 7.00 && version <= 11.02) matches.push('fw1102lapse');
-      if (version >= 9.00 && version <= 11.02) matches.push('fw1102netctrl');
-      if (version >= 11.00 && version <= 12.02) matches.push('fw1202');
-      if (version >= 12.50 && version <= 13.00) matches.push('fw1300');
-      if (version >= 13.02 && version <= 13.52) matches.push('fw1352');
-      if (matches.length) {
-        note = 'Detected target: ' + firmware + ' · matching upstream chain range(s) are highlighted; attempts are not guaranteed.';
-      } else {
-        matches = ['rangeOther'];
-        note = 'Detected target: ' + firmware + ' · no chain for this exact release appears in the checked upstream matrix.';
-      }
-    } else {
-      matches = ['rangeOther'];
-      note = 'Firmware could not be read from this browser. Check the console browser and retry.';
-    }
-
-    for (i = 0; i < matches.length; i++) setVersionRow(matches[i], true);
-    var upstreamLink = document.getElementById('upstreamHost');
-    var legacyLink = document.getElementById('legacyHost');
-    var routeTitle = document.getElementById('routeTitle');
-    var routeDetail = document.getElementById('routeDetail');
-    var hasChain = matches.some(function (id) { return id !== 'fw505' && id !== 'range1400' && id !== 'rangeOther'; });
-    var legacy505 = matches.indexOf('fw505') !== -1;
-    if (upstreamLink) upstreamLink.hidden = !hasChain;
-    if (legacyLink) legacyLink.hidden = !legacy505;
-    if (routeTitle) routeTitle.textContent = hasChain ? 'Jailbreak chain listed for this firmware' : (legacy505 ? 'Legacy 5.05 route available' : 'No matching jailbreak route listed');
-    if (routeDetail) routeDetail.textContent = hasChain
-      ? 'This host contains the upstream WebKitty chain and GoldHEN selector for the listed range. The exploit starts only when you use its launch control.'
-      : (legacy505
-        ? '5.05 uses its own legacy host. The 5.05 route is separate from the integrated 6.70–13.52 chains.'
-        : 'This page will not start a payload for this firmware. Check the exact release and its published exploit status.');
-    set('versionNote', note);
-  }
-
-  function check(isAutomatic) {
-    var info = uaInfo();
-    var isPS4 = /PlayStation/i.test(info.ua);
-    var target = info.firmware === '14.00';
-    set('environment', isPS4 ? 'PlayStation browser' : 'Browser available');
-    set('firmware', info.firmware);
-    set('heroFirmware', info.firmware === 'Unknown' ? 'Unknown' : info.firmware);
-    set('webkit', info.webkit);
-    set('entry', 'Not integrated');
-    set('autoStatus', isAutomatic ? 'AUTO CHECK COMPLETE' : 'CHECK COMPLETE');
-    set('overallStatus', target ? 'Firmware 14.00 detected · research mode' : (isPS4 ? 'Console browser detected' : 'Browser ready · console not detected'));
-    set('overallDetail', target
-      ? 'Browser entry and kernel access are not integrated. Automatic payload injection is disabled.'
-      : 'This automatic check reads browser details only. No exploit or HEN is launched.');
-    updateVersionMap(info.firmware);
-    lastLog = 'ORBIT FIELD HUD v2.9 / environment check';
-    log('PlayStation browser: ' + (isPS4 ? 'yes' : 'not detected'));
-    log('Firmware: ' + info.firmware);
-    log('WebKit: ' + info.webkit);
-    log('Support map: checked against published upstream ranges');
-    log('Compatible chain ranges: highlighted in the firmware map');
-    log('Launch is manual from the selected host');
-  }
-
-  function probe() {
-    var tests = [
-      ['BigInt', function () { return typeof BigInt !== 'undefined'; }],
-      ['WebAssembly', function () { return typeof WebAssembly !== 'undefined'; }],
-      ['SharedArrayBuffer', function () { return typeof SharedArrayBuffer !== 'undefined'; }],
-      ['Atomics', function () { return typeof Atomics !== 'undefined'; }],
-      ['BigUint64Array', function () { return typeof BigUint64Array !== 'undefined'; }],
-      ['Proxy', function () { return typeof Proxy !== 'undefined'; }],
-      ['Reflect', function () { return typeof Reflect !== 'undefined'; }],
-      ['Promise', function () { return typeof Promise !== 'undefined'; }],
-      ['fetch', function () { return typeof fetch !== 'undefined'; }],
-      ['Worker', function () { return typeof Worker !== 'undefined'; }]
-    ];
-    var count = 0;
-    lastLog = 'Browser capability checks';
-    tests.forEach(function (test) {
-      var ok = false;
-      try { ok = !!test[1](); } catch (e) { ok = false; }
-      if (ok) count++;
-      log(test[0] + ': ' + (ok ? 'present' : 'unavailable'));
-    });
-    set('probe', count + '/' + tests.length + ' present');
-    log('These checks do not test exploitability.');
-  }
-
-  function regression() {
-    var start = Date.now();
-    var failures = 0;
-    var checks = 0;
-    var i;
-    lastLog = 'Safe browser regression checks';
-    try {
-      for (i = 0; i < 10000; i++) {
-        var arr = [i, i + 1, i + 2];
-        if (arr[2] !== i + 2) throw new Error('array mismatch');
-        checks++;
-      }
-      log('Array operations: PASS');
-    } catch (e) { failures++; log('Array operations: FAIL'); }
-    try {
-      var buffer = new ArrayBuffer(65536);
-      var view = new Uint32Array(buffer);
-      for (i = 0; i < view.length; i += 127) view[i] = i;
-      for (i = 0; i < view.length; i += 127) {
-        if (view[i] !== i) throw new Error('typed-array mismatch');
-        checks++;
-      }
-      log('ArrayBuffer and TypedArray: PASS');
-    } catch (e) { failures++; log('ArrayBuffer and TypedArray: FAIL'); }
-    try {
-      var sample = { firmware: '14.00', browserOnly: true };
-      if (sample.firmware !== '14.00' || sample.browserOnly !== true) throw new Error('object mismatch');
-      checks++;
-      log('Object operations: PASS');
-    } catch (e) { failures++; log('Object operations: FAIL'); }
-    set('stress', failures ? 'FAIL (' + failures + ')' : 'PASS');
-    log('Checks: ' + checks);
-    log('Elapsed: ' + (Date.now() - start) + ' ms');
-    log('Failures: ' + failures);
-    log('Kernel and HEN execution: not tested');
-  }
-
-  function report() {
-    var info = uaInfo();
-    var reportText = [
-      'ORBIT FIELD HUD v2.9 · PS4 Jailbreak Host',
-      'Timestamp: ' + new Date().toISOString(),
-      'Firmware: ' + info.firmware,
-      'WebKit: ' + info.webkit,
-      'URL: ' + location.href,
-      'Landing page: firmware selector only',
-      'Integrated WebKitty host: available for its published firmware ranges',
-      'Exploit launch: manual in selected host; not run from landing page',
-      '14.00: diagnostics only; no verified full chain',
-      '', lastLog
-    ].join('\n');
-    logEl.textContent = reportText;
-  }
-
-  document.getElementById('check').addEventListener('click', function () { check(false); });
-  document.getElementById('runProbe').addEventListener('click', probe);
-  document.getElementById('runStress').addEventListener('click', regression);
-  document.getElementById('exportLog').addEventListener('click', report);
-
+  checkFirmware();
   updateClock();
   window.setInterval(updateClock, 1000);
-  check(true);
-})();
+}());
