@@ -1,133 +1,128 @@
 <!doctype html>
-<html lang="en">
+<html lang="el">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#07101f">
-<meta name="description" content="PS4 browser diagnostics and public firmware compatibility status.">
-<title>PS4 Jailbreak Host · Firmware Map</title>
-<link rel="stylesheet" href="style.css?v=2.9">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="ORBIT PS4 firmware host: firmware diagnostics and published jailbreak compatibility through 13.52.">
+  <title>ORBIT · PS4 Firmware Host</title>
+  <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body>
 <main class="shell">
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true"><span>PS</span><b>4</b></div>
-      <div>
-        <p class="eyebrow">CONSOLE RESEARCH / OFFLINE HOST</p>
-        <p class="brand-name">ORBIT <span>·</span> FIELD HUD</p>
+    <a class="brand" href="#top" aria-label="ORBIT, αρχική σελίδα">
+      <span class="brand-mark" aria-hidden="true"><span>PS</span><b>4</b></span>
+      <span class="brand-copy"><span class="eyebrow">PS4 FIRMWARE HOST</span><strong>ORBIT <i>FIELD HUD</i></strong></span>
+    </a>
+    <div class="topbar-right">
+      <span class="build-tag"><span class="live-dot"></span> BUILD 3.0</span>
+      <div class="clock-box" aria-label="Τοπική ώρα κονσόλας">
+        <span class="clock-label">ΤΟΠΙΚΗ ΩΡΑ</span>
+        <strong id="clock">--:--:--</strong>
+        <span id="clockDate">Έλεγχος ημερομηνίας…</span>
       </div>
-    </div>
-    <div class="clock-box" aria-label="Local console time">
-      <span class="clock-label">LOCAL TIME</span>
-      <strong id="clock">--:--:--</strong>
-      <span id="clockDate">Checking date…</span>
     </div>
   </header>
 
-  <section class="hero" aria-labelledby="heroHeading">
+  <nav class="quick-nav" aria-label="Γρήγορη πλοήγηση">
+    <a href="#device">Κονσόλα</a><a href="#firmware-map">Firmware</a><a href="#launch-route">Host</a><a href="#diagnostics">Διαγνωστικά</a>
+  </nav>
+
+  <section class="hero" id="top" aria-labelledby="heroHeading">
     <div class="hero-copy">
-      <p class="eyebrow"><span class="pulse"></span> SYSTEM PROFILE</p>
-      <h1 id="heroHeading">PlayStation 4<br><span>Firmware <b id="heroFirmware">14.00</b></span></h1>
-      <p class="hero-description">Browser diagnostics, firmware recognition and public compatibility status.</p>
+      <p class="eyebrow"><span class="live-dot"></span> ΠΙΝΑΚΑΣ ΚΑΤΑΣΤΑΣΗΣ</p>
+      <h1 id="heroHeading">PlayStation 4<br><span>Firmware <b id="heroFirmware">Έλεγχος…</b></span></h1>
+      <p class="hero-description">Αυτόματος έλεγχος browser και αντιστοίχιση με δημοσιευμένες αλυσίδες firmware.</p>
     </div>
-    <div class="hero-state">
-      <span class="state-icon" aria-hidden="true">!</span>
-      <span class="state-label">CURRENT MODE</span>
-      <strong>Host selector</strong>
-      <span class="state-detail">No exploit starts on this screen</span>
+    <div class="hero-state" id="heroState" data-state="checking">
+      <span class="state-kicker">ΚΑΤΑΣΤΑΣΗ</span>
+      <strong id="overallStatus">Έλεγχος browser…</strong>
+      <span id="overallDetail">Η σελίδα δεν εκκινεί exploit ή payload αυτόματα.</span>
     </div>
-    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+    <div class="hero-orbit orbit-two" aria-hidden="true"></div>
   </section>
 
-  <section class="status-banner" aria-live="polite">
-    <span class="status-dot" aria-hidden="true"></span>
-    <div>
-      <strong id="overallStatus">Checking browser…</strong>
-      <p id="overallDetail">Reading the browser firmware string. No exploit or payload is launched.</p>
-    </div>
-    <span class="status-code" id="autoStatus">AUTO CHECK</span>
-  </section>
-
-  <section class="panel" aria-labelledby="deviceHeading">
+  <section class="panel device-panel" id="device" aria-labelledby="deviceHeading">
     <div class="section-heading">
-      <div><p class="eyebrow">01 / DEVICE</p><h2 id="deviceHeading">Environment</h2></div>
-      <button class="button button-primary" id="check">Recheck console</button>
+      <div><p class="eyebrow">01 / ΣΥΣΚΕΥΗ</p><h2 id="deviceHeading">Περιβάλλον κονσόλας</h2></div>
+      <button class="button button-secondary" id="check" type="button">Επανέλεγχος</button>
     </div>
     <dl class="facts">
-      <div><dt>Environment</dt><dd id="environment">Checking…</dd></div>
-      <div><dt>Firmware</dt><dd id="firmware">Unknown</dd></div>
-      <div><dt>WebKit</dt><dd id="webkit">Unknown</dd></div>
-      <div><dt>Entry point</dt><dd class="blocked" id="entry">Not integrated</dd></div>
+      <div><dt>Περιβάλλον</dt><dd id="environment">Έλεγχος…</dd></div>
+      <div><dt>Firmware</dt><dd id="firmware">Άγνωστο</dd></div>
+      <div><dt>WebKit</dt><dd id="webkit">Άγνωστο</dd></div>
+      <div><dt>Κατάσταση host</dt><dd id="entry">Γίνεται έλεγχος</dd></div>
     </dl>
   </section>
 
-  <section class="panel" aria-labelledby="versionsHeading">
+  <section class="panel" id="firmware-map" aria-labelledby="versionsHeading">
     <div class="section-heading">
-      <div><p class="eyebrow">02 / FIRMWARE MAP</p><h2 id="versionsHeading">Public support status</h2></div>
-      <span class="tag tag-info">Community reference</span>
+      <div><p class="eyebrow">02 / ΧΑΡΤΗΣ ΕΚΔΟΣΕΩΝ</p><h2 id="versionsHeading">Δημοσιευμένη συμβατότητα</h2></div>
+      <span class="tag tag-info">Έως 13.52</span>
     </div>
-    <p class="section-note">Support varies by exact firmware and exploit method. Matching routes open in the integrated host or a legacy host; you start the exploit there manually.</p>
-    <div class="version-table" role="table" aria-label="Firmware support status">
-      <div class="version-row version-head" role="row"><span role="columnheader">Firmware</span><span role="columnheader">Published chain / status</span><span role="columnheader">Evidence</span></div>
-      <div class="version-row" role="row" id="fw505"><strong>5.05</strong><span>Legacy exploit route; GoldHEN release exists. Separate host required.</span><span class="tag tag-info">Reference</span></div>
-      <div class="version-row" role="row" id="fwLegacy"><strong>Below 6.70</strong><span>Legacy firmware methods vary by exact build; outside the linked chain matrix.</span><span class="tag tag-muted">Not mapped</span></div>
-      <div class="version-row" role="row" id="fw670"><strong>6.70–6.72</strong><span>Bad Hoist + Sleirsgoevy kernel exploit</span><span class="tag tag-tested">Upstream tested</span></div>
-      <div class="version-row" role="row" id="fw960"><strong>7.00–9.60</strong><span>PSFree + Lapse</span><span class="tag tag-tested">Upstream tested</span></div>
-      <div class="version-row" role="row" id="fw1102lapse"><strong>7.00–11.02</strong><span>CSSFontFace + Lapse</span><span class="tag tag-tested">Upstream tested</span></div>
-      <div class="version-row" role="row" id="fw1102netctrl"><strong>9.00–11.02</strong><span>CSSFontFace + Netctrl</span><span class="tag tag-tested">Upstream tested</span></div>
-      <div class="version-row" role="row" id="fw1202"><strong>11.00–12.02</strong><span>Slopkit + Lapse</span><span class="tag tag-tested">Upstream tested</span></div>
-      <div class="version-row" role="row" id="fw1300"><strong>12.50–13.00</strong><span>Slopkit + Netctrl</span><span class="tag tag-tested">Upstream tested</span></div>
-      <div class="version-row" role="row" id="fw1352"><strong>13.02–13.52</strong><span>Slopkit + Relapse</span><span class="tag tag-tested">Upstream tested</span></div>
-      <div class="version-row" role="row" id="range1400"><strong>14.00</strong><span>No verified public full chain integrated in this host</span><span class="tag tag-blocked">Diagnostics only</span></div>
-      <div class="version-row" role="row" id="rangeOther"><strong>Unlisted / unknown</strong><span>Not listed in the checked upstream compatibility matrix</span><span class="tag tag-muted">Check exact FW</span></div>
+    <p class="section-note">Οι γραμμές δείχνουν συγκεκριμένους συνδυασμούς entry και kernel από το upstream WebKitty. Τα επικαλυπτόμενα εύρη είναι εναλλακτικές αλυσίδες. Τα κενά δεν θεωρούνται υποστηριζόμενα.</p>
+    <div class="version-table" role="table" aria-label="Χάρτης συμβατότητας firmware">
+      <div class="version-row version-head" role="row"><span role="columnheader">Firmware</span><span role="columnheader">Δημοσιευμένη αλυσίδα</span><span role="columnheader">Κατάσταση</span></div>
+      <div class="version-row" role="row" id="fw505"><strong>5.05</strong><span>Ξεχωριστός legacy host · εκτός WebKitty matrix</span><span class="tag tag-legacy">Legacy</span></div>
+      <div class="version-row" role="row" id="fwLegacy"><strong>&lt; 6.70</strong><span>Δεν καλύπτεται από τα ενσωματωμένα εύρη</span><span class="tag tag-muted">Μη χαρτογραφημένο</span></div>
+      <div class="version-row" role="row" id="fw670"><strong>6.70–6.72</strong><span>Bad Hoist + Sleirsgoevy kernel exploit</span><span class="tag tag-supported">Upstream</span></div>
+      <div class="version-row" role="row" id="fw960"><strong>7.00–9.60</strong><span>PSFree + Lapse</span><span class="tag tag-supported">Upstream</span></div>
+      <div class="version-row" role="row" id="fw1102lapse"><strong>7.00–11.02</strong><span>CSSFontFace + Lapse</span><span class="tag tag-supported">Upstream</span></div>
+      <div class="version-row" role="row" id="fw1102netctrl"><strong>9.00–11.02</strong><span>CSSFontFace + Netctrl</span><span class="tag tag-supported">Upstream</span></div>
+      <div class="version-row" role="row" id="fw1202"><strong>11.00–12.02</strong><span>Slopkit + Lapse</span><span class="tag tag-supported">Upstream</span></div>
+      <div class="version-row" role="row" id="fw1300"><strong>12.50–13.00</strong><span>Slopkit + Netctrl</span><span class="tag tag-supported">Upstream</span></div>
+      <div class="version-row" role="row" id="fw1352"><strong>13.02–13.52</strong><span>Slopkit + Relapse</span><span class="tag tag-supported">Upstream</span></div>
+      <div class="version-row coming-row" role="row" id="range1400"><strong>14.00</strong><span>Δεν υπάρχει ενσωματωμένη, επαληθευμένη πλήρης αλυσίδα</span><span class="tag tag-coming">Coming soon</span></div>
+      <div class="version-row" role="row" id="rangeOther"><strong>Άλλη έκδοση</strong><span>Δεν αντιστοιχεί σε εύρος του ελεγμένου πίνακα</span><span class="tag tag-muted">Έλεγχος έκδοσης</span></div>
     </div>
-    <p class="selection-note" id="versionNote" aria-live="polite">Checking the exact firmware against published compatibility ranges…</p>
-    <div class="route-card" id="routeCard">
-      <div><strong id="routeTitle">Choose the matching route</strong><p id="routeDetail">The firmware check selects a matching host link. An exploit starts only after you open that host and choose its launch control.</p></div>
-      <a id="upstreamHost" class="button button-primary" href="webkitty/index.html" hidden>Open integrated jailbreak host</a>
-      <a id="legacyHost" class="button button-primary" href="https://gamerhack.github.io/505/index.html" target="_blank" rel="noopener noreferrer" hidden>Open 5.05 GoldHEN host</a>
-    </div>
-    <p class="section-note goldhen-note"><strong>GoldHEN is a separate compatibility check.</strong> An exploit chain working on a firmware does not by itself prove that every GoldHEN build supports it. The upstream host offers a GoldHEN selection; use only a build explicitly listed for your exact firmware.</p>
-    <p class="source-link"><a href="https://github.com/ArabPixel/WebKitty#supported-by-this-repository" target="_blank" rel="noopener noreferrer">Upstream exploit-chain matrix</a> · <a href="https://github.com/GoldHEN/GoldHEN/releases" target="_blank" rel="noopener noreferrer">GoldHEN release compatibility</a></p>
+    <p class="selection-note" id="versionNote" aria-live="polite">Έλεγχος της ακριβούς έκδοσης…</p>
+    <p class="matrix-note"><strong>Σημαντικό:</strong> οι προσπάθειες exploit μπορεί να αποτύχουν ή να κάνουν επανεκκίνηση την κονσόλα. Η επιλογή GoldHEN είναι ξεχωριστή από τη συμβατότητα της αλυσίδας· χρησιμοποίησε μόνο build που αναφέρει ρητά την έκδοσή σου.</p>
   </section>
 
-  <section class="panel" aria-labelledby="chainHeading">
+  <section class="panel route-panel" id="launch-route" aria-labelledby="routeHeading">
     <div class="section-heading">
-      <div><p class="eyebrow">03 / THIS HOST</p><h2 id="chainHeading">Integration status</h2></div>
-      <span class="tag tag-info">Status guide only</span>
+      <div><p class="eyebrow">03 / ΕΠΟΜΕΝΟ ΒΗΜΑ</p><h2 id="routeHeading">Κατάλληλος host</h2></div>
+      <span class="tag tag-info" id="autoStatus">AUTO CHECK</span>
     </div>
-    <ol class="stages">
-      <li><span class="stage-number">01</span><div><strong>Browser entry</strong><p>WebKitty source is included under <code>webkitty/</code></p></div><span class="tag tag-info">Included</span></li>
-      <li><span class="stage-number">02</span><div><strong>Kernel chain</strong><p>Firmware-based chain selection for listed ranges</p></div><span class="tag tag-info">Included</span></li>
-      <li><span class="stage-number">03</span><div><strong>Kernel patches</strong><p>Uses upstream firmware-specific patch files</p></div><span class="tag tag-info">Included</span></li>
-      <li><span class="stage-number">04</span><div><strong>GoldHEN / HEN</strong><p>Select a payload version matched to the console firmware</p></div><span class="tag tag-pending">Check version</span></li>
-    </ol>
-    <p class="callout"><strong>The landing page does not auto-launch or inject a payload.</strong> The integrated host runs only after you open it and select its launch control. For 14.00, the checked offsets/artifact still do not establish a working exploit chain.</p>
-    <p class="source-link"><a href="https://github.com/Scene-Collective/ps4-hen/releases/tag/pre-release-main-182">View the experimental PS4-HEN source and release</a></p>
+    <div class="route-card">
+      <div class="route-icon" aria-hidden="true">↗</div>
+      <div class="route-copy"><strong id="routeTitle">Αναμονή ελέγχου έκδοσης</strong><p id="routeDetail">Θα εμφανιστεί σύνδεσμος μόνο όταν η έκδοση ταιριάζει σε δημοσιευμένο εύρος.</p></div>
+      <a id="upstreamHost" class="button button-primary" href="webkitty/index.html" hidden>Άνοιγμα WebKitty</a>
+      <a id="legacyHost" class="button button-primary" href="https://gamerhack.github.io/505/index.html" target="_blank" rel="noopener noreferrer" hidden>Άνοιγμα host 5.05</a>
+    </div>
+    <div class="stage-grid" aria-label="Στάδια jailbreak">
+      <article class="stage-card"><span class="stage-index">01</span><div><strong>Browser entry</strong><p>Επιλέγεται από τον upstream host για τη συμβατή έκδοση.</p></div></article>
+      <article class="stage-card"><span class="stage-index">02</span><div><strong>Kernel chain</strong><p>Χρησιμοποιείται μόνο όταν υπάρχει ακριβές δημοσιευμένο εύρος.</p></div></article>
+      <article class="stage-card"><span class="stage-index">03</span><div><strong>HEN / GoldHEN</strong><p>Εκκίνηση χειροκίνητα από το WebKitty, με κατάλληλο payload build.</p></div></article>
+    </div>
+    <p class="manual-note"><strong>Χειροκίνητη εκκίνηση:</strong> το ORBIT κάνει μόνο έλεγχο και επιλογή host. Το exploit ξεκινά όταν ανοίξεις το WebKitty και πατήσεις το δικό του κουμπί εκκίνησης.</p>
+    <p class="source-link"><a href="https://github.com/ArabPixel/WebKitty#supported-by-this-repository" target="_blank" rel="noopener noreferrer">Πίνακας upstream αλυσίδων</a><a href="https://github.com/GoldHEN/GoldHEN/releases" target="_blank" rel="noopener noreferrer">Επίσημα GoldHEN releases</a><a href="SOURCE-AUDIT-14.00.md">Έλεγχος έκδοσης 14.00</a></p>
   </section>
 
-  <section class="panel" aria-labelledby="checksHeading">
+  <section class="panel diagnostics-panel" id="diagnostics" aria-labelledby="checksHeading">
     <div class="section-heading">
-      <div><p class="eyebrow">04 / SAFE TOOLS</p><h2 id="checksHeading">Browser checks</h2></div>
+      <div><p class="eyebrow">04 / ΕΡΓΑΛΕΙΑ</p><h2 id="checksHeading">Ασφαλή διαγνωστικά browser</h2></div>
+      <span class="tag tag-muted">Δεν ελέγχουν exploitability</span>
     </div>
     <div class="button-row">
-      <button class="button" id="runProbe">Check capabilities</button>
-      <button class="button" id="runStress">Run safe checks</button>
-      <button class="button" id="exportLog">Show report</button>
+      <button class="button button-secondary" id="runProbe" type="button">Έλεγχος δυνατοτήτων</button>
+      <button class="button button-secondary" id="runStress" type="button">Απλοί έλεγχοι λειτουργίας</button>
+      <button class="button button-quiet" id="exportLog" type="button">Προβολή αναφοράς</button>
     </div>
     <dl class="facts compact">
-      <div><dt>Capability probe</dt><dd id="probe">Not run</dd></div>
-      <div><dt>Safe checks</dt><dd id="stress">Not run</dd></div>
+      <div><dt>Δυνατότητες browser</dt><dd id="probe">Δεν εκτελέστηκε</dd></div>
+      <div><dt>Απλοί έλεγχοι</dt><dd id="stress">Δεν εκτελέστηκε</dd></div>
     </dl>
-    <pre id="log" aria-live="polite">Starting automatic browser check. Payload execution is disabled.</pre>
+    <pre id="log" aria-live="polite">Αυτόματος έλεγχος browser. Δεν εκτελείται payload.</pre>
   </section>
 
   <footer>
-    <p><span class="footer-mark">ORBIT HUD / v2.9</span> Firmware chains and payloads come from the linked upstream projects; attempts can still fail or crash.</p>
-    <div class="footer-links"><a href="SOURCE-AUDIT-14.00.md">Read the 14.00 source audit</a><a href="experiment.html">Verify the experimental HEN artifact</a></div>
+    <p><span class="footer-mark">ORBIT / FIELD HUD 3.0</span> · Το ενσωματωμένο WebKitty διατηρεί τα upstream αρχεία και την άδειά τους. Τα αποτελέσματα εξαρτώνται από το ακριβές firmware και το payload.</p>
+    <div class="footer-links"><a href="README.md">Οδηγίες και υποστήριξη</a><a href="https://github.com/ArabPixel/WebKitty" target="_blank" rel="noopener noreferrer">Upstream WebKitty</a></div>
   </footer>
 </main>
-<script src="host.js?v=2.9"></script>
+<script src="host.js?v=3.0"></script>
 </body>
 </html>
